@@ -3,9 +3,9 @@ const debts = [
     creditor: "Антон",
     headline: "Антону винні",
     card: "-",
-    line: "Валік Антону винен 1090, Микола - 557, я - 231",
+    line: "Валік Антону винен 510, Микола - 557, я - 231",
     items: [
-      { debtor: "Валік", amount: 1090 },
+      { debtor: "Валік", amount: 510 },
       { debtor: "Микола", amount: 557 },
       { debtor: "Я", amount: 231 },
     ],
@@ -42,7 +42,10 @@ function getTotalDebt() {
 function makeTickerText() {
   return debts
     .flatMap((group) =>
-      group.items.map((item) => `${item.debtor} -> ${group.creditor}: ${plainMoney.format(item.amount)} грн`)
+      group.items.map(
+        (item) =>
+          `${item.debtor} -> ${group.creditor}: ${plainMoney.format(item.amount)} грн`,
+      ),
     )
     .join("   |   ");
 }
@@ -66,7 +69,9 @@ function renderHero() {
 }
 
 function renderSummary() {
-  const debtors = new Set(debts.flatMap((group) => group.items.map((item) => item.debtor)));
+  const debtors = new Set(
+    debts.flatMap((group) => group.items.map((item) => item.debtor)),
+  );
   const summary = [
     ["Всього", `${money.format(getTotalDebt())} грн`],
     ["Кому винні", `${debts.length}`],
@@ -134,7 +139,8 @@ function renderDebtGroups() {
       </div>
     `;
     article.querySelector("h3").textContent = group.headline;
-    article.querySelector(".group-total").textContent = `${money.format(getGroupTotal(group))} грн`;
+    article.querySelector(".group-total").textContent =
+      `${money.format(getGroupTotal(group))} грн`;
     article.append(list, cardLine, quoteLine);
     debtGroupsEl.append(article);
   });
