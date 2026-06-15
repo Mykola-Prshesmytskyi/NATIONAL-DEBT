@@ -1,23 +1,12 @@
 const debts = [
   {
-    creditor: "Антон",
-    headline: "Антону винні",
-    card: "-",
-    line: "Валік Антону винен 510, Микола - 557, я - 231",
-    items: [
-      { debtor: "Валік", amount: 510 },
-      { debtor: "Микола", amount: 557 },
-      { debtor: "Я", amount: 231 },
-    ],
-  },
-  {
     creditor: "мені",
-    headline: "Мені винні",
+    headline: "Казна Кольчина",
     card: "4441111039119668",
-    line: "Микола винен мені 1358, Валік - 265",
+    line: "Микола винен мені 2417, Валік - 2608. Борги тільки мені.",
     items: [
-      { debtor: "Микола", amount: 1358 },
-      { debtor: "Валік", amount: 265 },
+      { debtor: "Микола", amount: 2417 },
+      { debtor: "Валік", amount: 2608 },
     ],
   },
 ];
@@ -30,6 +19,7 @@ const summaryGridEl = document.querySelector("#summaryGrid");
 const debtGroupsEl = document.querySelector("#debtGroups");
 const tickerTrackEl = document.querySelector("#tickerTrack");
 const todayStampEl = document.querySelector("#todayStamp");
+const copyResetTimers = new WeakMap();
 
 function getGroupTotal(group) {
   return group.items.reduce((sum, item) => sum + item.amount, 0);
@@ -73,8 +63,8 @@ function renderSummary() {
     debts.flatMap((group) => group.items.map((item) => item.debtor)),
   );
   const summary = [
-    ["Всього", `${money.format(getTotalDebt())} грн`],
-    ["Кому винні", `${debts.length}`],
+    ["До казни", `${money.format(getTotalDebt())} грн`],
+    ["Кредиторів", `${debts.length}`],
     ["Боржників", `${debtors.size}`],
     ["Записів", `${debts.reduce((sum, group) => sum + group.items.length, 0)}`],
   ];
@@ -128,9 +118,18 @@ function renderDebtGroups() {
 
     const cardLine = document.createElement("div");
     cardLine.className = "card-line";
-    cardLine.innerHTML = `<span></span><strong></strong>`;
-    cardLine.querySelector("span").textContent = "Картка";
+    cardLine.innerHTML = `
+      <span></span>
+      <strong></strong>
+      <button class="copy-card-button" type="button"></button>
+    `;
+    cardLine.querySelector("span").textContent = "Картка для переказу";
     cardLine.querySelector("strong").textContent = formatCard(group.card);
+
+    const copyButton = cardLine.querySelector(".copy-card-button");
+    copyButton.textContent = "Копіювати";
+    copyButton.dataset.copyValue = group.card;
+    copyButton.disabled = !group.card || group.card === "-";
 
     article.innerHTML = `
       <div class="group-header">
@@ -143,6 +142,60 @@ function renderDebtGroups() {
       `${money.format(getGroupTotal(group))} грн`;
     article.append(list, cardLine, quoteLine);
     debtGroupsEl.append(article);
+  });
+}
+
+async function copyToClipboard(text) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "-1000px";
+  textarea.style.left = "-1000px";
+  document.body.append(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  try {
+    const copied = document.execCommand("copy");
+
+    if (!copied) {
+      throw new Error("Copy command failed");
+    }
+  } finally {
+    textarea.remove();
+  }
+}
+
+function setupCopyButtons() {
+  debtGroupsEl.addEventListener("click", async (event) => {
+    const button = event.target.closest(".copy-card-button");
+
+    if (!button || button.disabled) {
+      return;
+    }
+
+    try {
+      await copyToClipboard(button.dataset.copyValue);
+      button.textContent = "Скопійовано";
+      button.classList.add("is-copied");
+      window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.("success");
+
+      window.clearTimeout(copyResetTimers.get(button));
+      const resetTimer = window.setTimeout(() => {
+        button.textContent = "Копіювати";
+        button.classList.remove("is-copied");
+      }, 1800);
+      copyResetTimers.set(button, resetTimer);
+    } catch {
+      button.textContent = "Не скопійовано";
+      window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.("error");
+    }
   });
 }
 
@@ -164,8 +217,8 @@ function setupTelegramShell() {
   try {
     tg.ready?.();
     tg.expand?.();
-    tg.setHeaderColor?.("#050504");
-    tg.setBackgroundColor?.("#050504");
+    tg.setHeaderColor?.("#060708");
+    tg.setBackgroundColor?.("#060708");
   } catch {
     // The page should still work as a normal GitHub Pages site.
   }
@@ -178,4 +231,5 @@ function render() {
 }
 
 setupTelegramShell();
+setupCopyButtons();
 render();
