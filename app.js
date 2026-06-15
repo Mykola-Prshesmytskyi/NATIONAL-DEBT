@@ -3,10 +3,8 @@ const debts = [
     creditor: "мені",
     headline: "Казна Кольчина",
     card: "4441111039119668",
-    line: "Валік винен мені 2608. Борг тільки мені.",
-    items: [
-      { debtor: "Валік", amount: 2608 },
-    ],
+    line: "Валік винен 2608.",
+    items: [{ debtor: "Валік", amount: 2608 }],
   },
 ];
 
@@ -183,7 +181,9 @@ function setupCopyButtons() {
       await copyToClipboard(button.dataset.copyValue);
       button.textContent = "Скопійовано";
       button.classList.add("is-copied");
-      window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.("success");
+      window.Telegram?.WebApp?.HapticFeedback?.notificationOccurred?.(
+        "success",
+      );
 
       window.clearTimeout(copyResetTimers.get(button));
       const resetTimer = window.setTimeout(() => {
