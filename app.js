@@ -3,8 +3,8 @@ const debts = [
     creditor: "Банк Кольчина",
     headline: "Казна Кольчина",
     card: "4441111039119668",
-    line: "Валік винен 2608.",
-    items: [{ debtor: "Валік", amount: 2608 }],
+    line: "Валік винен 2708.",
+    items: [{ debtor: "Валік", amount: 2708 }],
   },
 ];
 
