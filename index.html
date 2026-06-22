@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f4f7fb" />
+    <meta name="theme-color" content="#eef4f8" />
     <title>National Debt</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -11,53 +11,39 @@
   <body>
     <main class="app-shell">
       <header class="topbar">
-        <div>
+        <div class="brand-block">
           <p class="eyebrow">Telegram Mini App</p>
           <h1>National Debt</h1>
-          <p class="start-line" id="start-line">Старт: не задано</p>
+          <p class="start-line" id="start-line">Старт: сьогодні</p>
         </div>
-        <div class="sync-pill" id="sync-status">Завантаження...</div>
+        <div class="top-actions">
+          <button class="ghost-button" type="button" id="open-settings">Старт і рахунки</button>
+          <div class="sync-pill" id="sync-status">Завантаження...</div>
+        </div>
       </header>
 
-      <section class="balance-strip" aria-label="Поточні баланси">
-        <article class="metric-card metric-card--ink">
-          <span>Баланс UAH</span>
-          <strong id="balance-uah">0 грн</strong>
-          <small>Карта + готівка</small>
-        </article>
-        <article class="metric-card">
-          <span>Карта</span>
-          <strong id="balance-card">0 грн</strong>
-          <small id="start-card-label">Старт: 0 грн</small>
-        </article>
-        <article class="metric-card">
-          <span>Готівка</span>
-          <strong id="balance-cash">0 грн</strong>
-          <small id="start-cash-label">Старт: 0 грн</small>
-        </article>
-        <article class="metric-card">
-          <span>Долари</span>
-          <strong id="balance-usd">$0</strong>
-          <small id="start-usd-label">Старт: 0 USD</small>
-        </article>
-      </section>
-
-      <section class="budget-grid" aria-label="Бюджети">
-        <article class="budget-panel budget-panel--daily">
+      <section class="dashboard-grid" aria-label="Огляд бюджету">
+        <article class="budget-hero">
           <div class="panel-head">
             <div>
               <span class="panel-kicker" id="days-count">День 1</span>
-              <h2>Денний ліміт</h2>
+              <h2>Загальний денний ліміт</h2>
             </div>
             <strong id="daily-remaining">0 грн</strong>
           </div>
-          <div class="budget-row">
-            <span>Нараховано</span>
-            <b id="daily-accrued">0 грн</b>
-          </div>
-          <div class="budget-row">
-            <span>Витрачено</span>
-            <b id="daily-spent">0 грн</b>
+          <div class="budget-stats">
+            <div>
+              <span>Нараховано</span>
+              <b id="daily-accrued">0 грн</b>
+            </div>
+            <div>
+              <span>Витрачено</span>
+              <b id="daily-spent">0 грн</b>
+            </div>
+            <div>
+              <span>Щодня</span>
+              <b id="daily-rate">500 грн</b>
+            </div>
           </div>
           <div class="progress-track" aria-hidden="true">
             <div class="progress-bar" id="daily-progress"></div>
@@ -67,7 +53,6 @@
         <article class="budget-panel budget-panel--subs">
           <div class="panel-head">
             <div>
-              <span class="panel-kicker">Окремо</span>
               <h2>Підписки</h2>
             </div>
             <strong id="subs-remaining">0 грн</strong>
@@ -86,44 +71,38 @@
         </article>
       </section>
 
-      <form class="settings-panel" id="settings-form" autocomplete="off">
-        <div class="section-heading">
-          <h2>Стартові налаштування</h2>
-          <span class="panel-kicker">Вручну</span>
+      <section class="accounts-panel" aria-label="Рахунки">
+        <div class="section-heading section-heading--wrap">
+          <div>
+            <h2>Рахунки</h2>
+            <p id="accounts-summary">Додай картки, готівку або валютні рахунки</p>
+          </div>
+          <button class="secondary-button" type="button" id="open-settings-secondary">
+            Додати рахунок
+          </button>
         </div>
+        <div class="currency-strip" id="currency-strip"></div>
+        <div class="accounts-list" id="accounts-list"></div>
+      </section>
 
-        <div class="settings-grid">
-          <label class="field">
-            <span>Дата старту</span>
-            <input id="setting-start-date" type="date" required />
-          </label>
-          <label class="field">
-            <span>Денний ліміт, грн</span>
-            <input id="setting-daily" type="text" inputmode="decimal" placeholder="0" />
-          </label>
-          <label class="field">
-            <span>Підписки, грн</span>
-            <input id="setting-subscriptions" type="text" inputmode="decimal" placeholder="0" />
-          </label>
-          <label class="field">
-            <span>Старт карти, грн</span>
-            <input id="setting-card" type="text" inputmode="decimal" placeholder="0" />
-          </label>
-          <label class="field">
-            <span>Старт готівки, грн</span>
-            <input id="setting-cash" type="text" inputmode="decimal" placeholder="0" />
-          </label>
-          <label class="field">
-            <span>Старт доларів</span>
-            <input id="setting-usd" type="text" inputmode="decimal" placeholder="0" />
-          </label>
+      <section class="chart-panel" aria-label="Графік витрат">
+        <div class="section-heading section-heading--wrap">
+          <div>
+            <h2>Графік витрат</h2>
+            <p id="chart-summary">Без обмінів, у грн еквіваленті</p>
+          </div>
+          <div class="filters chart-filters" aria-label="Період графіка">
+            <button class="filter-button is-active" type="button" data-chart-range="7">
+              Тиждень
+            </button>
+            <button class="filter-button" type="button" data-chart-range="30">Місяць</button>
+            <button class="filter-button" type="button" data-chart-range="180">Пів року</button>
+          </div>
         </div>
-
-        <div class="form-actions">
-          <p class="form-message" id="settings-message" role="status"></p>
-          <button class="primary-button" type="submit">Зберегти</button>
+        <div class="chart-wrap">
+          <svg id="expense-chart" viewBox="0 0 720 260" role="img" aria-label="Графік витрат"></svg>
         </div>
-      </form>
+      </section>
 
       <section class="workspace">
         <form class="entry-form" id="entry-form" autocomplete="off">
@@ -145,38 +124,96 @@
               <input type="radio" name="entry-type" value="subscription" />
               <span>Підписка</span>
             </label>
+            <label>
+              <input type="radio" name="entry-type" value="exchange" />
+              <span>Обмін</span>
+            </label>
+            <label>
+              <input type="radio" name="entry-type" value="debt" />
+              <span>Борг</span>
+            </label>
           </div>
 
-          <div class="form-grid">
-            <label class="field">
-              <span>Сума</span>
-              <input
-                id="entry-amount"
-                type="text"
-                inputmode="decimal"
-                placeholder="0"
-                required
-              />
-            </label>
+          <div class="normal-fields" id="normal-fields">
+            <div class="debt-options" id="debt-options" hidden>
+              <div class="debt-mode" role="radiogroup" aria-label="Напрям боргу">
+                <label>
+                  <input type="radio" name="debt-direction" value="to_me" checked />
+                  <span>Мені винні</span>
+                </label>
+                <label>
+                  <input type="radio" name="debt-direction" value="by_me" />
+                  <span>Я винен</span>
+                </label>
+              </div>
+            </div>
 
-            <label class="field">
-              <span>Рахунок</span>
-              <select id="entry-account">
-                <option value="card">Карта, UAH</option>
-                <option value="cash">Готівка, UAH</option>
-                <option value="usdCash">Готівка, USD</option>
-              </select>
-            </label>
+            <div class="form-grid">
+              <label class="field">
+                <span>Сума</span>
+                <input id="entry-amount" type="text" inputmode="decimal" placeholder="0" />
+              </label>
 
-            <label class="field">
-              <span>Дата</span>
-              <input id="entry-date" type="date" required />
-            </label>
+              <label class="field">
+                <span>Рахунок</span>
+                <select id="entry-account"></select>
+              </label>
 
-            <label class="field field--wide">
-              <span id="detail-label">На що витрачено</span>
-              <input id="entry-detail" type="text" placeholder="Продукти, кава, таксі" required />
-            </label>
+              <label class="field" id="budget-equivalent-field">
+                <span>Для ліміту, грн</span>
+                <input id="entry-budget-amount" type="text" inputmode="decimal" placeholder="0" />
+              </label>
+
+              <label class="field">
+                <span>Дата</span>
+                <input id="entry-date" type="date" required />
+              </label>
+
+              <label class="field field--wide">
+                <span id="detail-label">На що витрачено</span>
+                <input id="entry-detail" type="text" placeholder="Продукти, кава, таксі" />
+              </label>
+
+              <label class="field field--wide debt-receipt-field" id="debt-receipt-field" hidden>
+                <span>Фото чека</span>
+                <span class="receipt-upload-button">Додати фото</span>
+                <input id="debt-receipt" type="file" accept="image/*" />
+                <small id="debt-receipt-name">Можна додати фото або скрін чека</small>
+              </label>
+            </div>
+          </div>
+
+          <div class="exchange-fields" id="exchange-fields" hidden>
+            <div class="exchange-grid">
+              <label class="field">
+                <span>Віддав з</span>
+                <select id="exchange-from-account"></select>
+              </label>
+              <label class="field">
+                <span>Сума</span>
+                <input id="exchange-from-amount" type="text" inputmode="decimal" placeholder="0" />
+              </label>
+              <button class="swap-button" type="button" id="swap-exchange" aria-label="Поміняти напрям">
+                ⇄
+              </button>
+              <label class="field">
+                <span>Отримав на</span>
+                <select id="exchange-to-account"></select>
+              </label>
+              <label class="field">
+                <span>Сума</span>
+                <input id="exchange-to-amount" type="text" inputmode="decimal" placeholder="0" />
+              </label>
+              <label class="field">
+                <span>Дата</span>
+                <input id="exchange-date" type="date" required />
+              </label>
+              <label class="field field--wide">
+                <span>Деталі</span>
+                <input id="exchange-detail" type="text" placeholder="Обмін, переказ між рахунками" />
+              </label>
+            </div>
+            <div class="rate-preview" id="exchange-rate-preview">Курс зʼявиться після сум</div>
           </div>
 
           <div class="form-actions">
@@ -187,12 +224,14 @@
 
         <section class="history-panel">
           <div class="section-heading section-heading--wrap">
-            <h2>Операції</h2>
+            <h2>Історія</h2>
             <div class="filters" aria-label="Фільтр операцій">
               <button class="filter-button is-active" type="button" data-filter="all">Усі</button>
               <button class="filter-button" type="button" data-filter="expense">Витрати</button>
               <button class="filter-button" type="button" data-filter="income">Доходи</button>
               <button class="filter-button" type="button" data-filter="subscription">Підписки</button>
+              <button class="filter-button" type="button" data-filter="exchange">Обміни</button>
+              <button class="filter-button" type="button" data-filter="debt">Борги</button>
             </div>
           </div>
           <div class="entries-list" id="entries-list"></div>
@@ -211,6 +250,141 @@
         </div>
       </section>
     </main>
+
+    <div class="modal-backdrop" id="settings-modal" hidden>
+      <section
+        class="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-title"
+      >
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Налаштування</p>
+            <h2 id="settings-title">Старт і рахунки</h2>
+          </div>
+          <button class="icon-button" type="button" id="close-settings" aria-label="Закрити">
+            ×
+          </button>
+        </div>
+
+        <form id="settings-form" autocomplete="off">
+          <div class="settings-grid">
+            <label class="field">
+              <span>Дата старту</span>
+              <input id="setting-start-date" type="date" required />
+            </label>
+            <label class="field">
+              <span>Денний ліміт, грн</span>
+              <input id="setting-daily" type="text" inputmode="decimal" placeholder="500" />
+            </label>
+            <label class="field">
+              <span>Підписки, грн</span>
+              <input id="setting-subscriptions" type="text" inputmode="decimal" placeholder="0" />
+            </label>
+          </div>
+
+          <div class="modal-section">
+            <div class="section-heading section-heading--wrap">
+              <div>
+                <h2>Новий рахунок</h2>
+                <p>Картка, готівка або будь-яка валюта</p>
+              </div>
+            </div>
+            <div class="account-create-grid">
+              <label class="field">
+                <span>Назва</span>
+                <input id="account-name" type="text" placeholder="Mono, Приват, USD cash" />
+              </label>
+              <label class="field">
+                <span>Тип</span>
+                <select id="account-kind">
+                  <option value="card">Картка</option>
+                  <option value="cash">Готівка</option>
+                  <option value="savings">Накопичення</option>
+                  <option value="other">Інше</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Валюта</span>
+                <input id="account-currency" list="currency-options" placeholder="UAH" />
+              </label>
+              <label class="field">
+                <span>Стартовий баланс</span>
+                <input id="account-initial" type="text" inputmode="decimal" placeholder="0" />
+              </label>
+              <button class="secondary-button" type="button" id="add-account">Додати рахунок</button>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <div class="section-heading section-heading--wrap">
+              <div>
+                <h2>Мої рахунки</h2>
+                <p>Тут можна змінити стартовий баланс або видалити порожній рахунок</p>
+              </div>
+            </div>
+            <div class="settings-accounts-list" id="settings-accounts-list"></div>
+          </div>
+
+          <div class="form-actions">
+            <p class="form-message" id="settings-message" role="status"></p>
+            <button class="primary-button" type="submit">Зберегти</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="debt-modal" hidden>
+      <section
+        class="modal-panel debt-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="debt-modal-title"
+      >
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Борг</p>
+            <h2 id="debt-modal-title">Розрахунок</h2>
+          </div>
+          <button class="icon-button" type="button" id="close-debt-modal" aria-label="Закрити">
+            ×
+          </button>
+        </div>
+
+        <p class="debt-summary" id="debt-modal-summary"></p>
+        <form id="debt-settlement-form" autocomplete="off">
+          <div class="settings-grid">
+            <label class="field">
+              <span id="debt-settlement-amount-label">Сума</span>
+              <input id="debt-settlement-amount" type="text" inputmode="decimal" placeholder="0" />
+            </label>
+            <label class="field">
+              <span>Рахунок</span>
+              <select id="debt-settlement-account"></select>
+            </label>
+            <label class="field">
+              <span>Дата</span>
+              <input id="debt-settlement-date" type="date" required />
+            </label>
+          </div>
+          <p class="debt-rule-note" id="debt-settlement-note"></p>
+          <div class="form-actions">
+            <p class="form-message" id="debt-settlement-message" role="status"></p>
+            <button class="primary-button" type="submit">Закрити борг</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <datalist id="currency-options">
+      <option value="UAH"></option>
+      <option value="USD"></option>
+      <option value="EUR"></option>
+      <option value="PLN"></option>
+      <option value="GBP"></option>
+      <option value="USDT"></option>
+    </datalist>
 
     <script src="app.js"></script>
   </body>
