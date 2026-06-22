@@ -7,6 +7,8 @@
   const APP_VERSION = 4;
   const BASE_CURRENCY = "UAH";
   const DEFAULT_DAILY_ALLOWANCE = 500;
+  const STORAGE_TIMEOUT_MS = 4500;
+  const SYNC_TIMEOUT_MS = 6000;
   const RECEIPT_MAX_SIZE = 1280;
   const RECEIPT_QUALITY = 0.78;
 
@@ -1524,7 +1526,9 @@
     }
 
     setSyncStatus("Синхронізація...", "warn");
-    const results = await Promise.allSettled(jobs);
+    const results = await Promise.allSettled(
+      jobs.map((job) => withTimeout(job, SYNC_TIMEOUT_MS, false)),
+    );
     const hasSuccess = results.some((result) => result.status === "fulfilled" && result.value);
     setSyncStatus(hasSuccess ? "Збережено" : "Локально збережено", hasSuccess ? "ok" : "warn");
   }
@@ -1554,36 +1558,51 @@
 
   function storageGet(storage, key) {
     return new Promise((resolve) => {
+      const finish = once(resolve);
+      const timer = window.setTimeout(() => finish(""), STORAGE_TIMEOUT_MS);
+
       try {
         storage.getItem(key, (error, value) => {
-          resolve(error ? "" : value || "");
+          window.clearTimeout(timer);
+          finish(error ? "" : value || "");
         });
       } catch {
-        resolve("");
+        window.clearTimeout(timer);
+        finish("");
       }
     });
   }
 
   function storageSet(storage, key, value) {
     return new Promise((resolve) => {
+      const finish = once(resolve);
+      const timer = window.setTimeout(() => finish(false), STORAGE_TIMEOUT_MS);
+
       try {
         storage.setItem(key, value, (error, ok) => {
-          resolve(!error && ok !== false);
+          window.clearTimeout(timer);
+          finish(!error && ok !== false);
         });
       } catch {
-        resolve(false);
+        window.clearTimeout(timer);
+        finish(false);
       }
     });
   }
 
   function storageRemove(storage, key) {
     return new Promise((resolve) => {
+      const finish = once(resolve);
+      const timer = window.setTimeout(() => finish(false), STORAGE_TIMEOUT_MS);
+
       try {
         storage.removeItem(key, (error, ok) => {
-          resolve(!error && ok !== false);
+          window.clearTimeout(timer);
+          finish(!error && ok !== false);
         });
       } catch {
-        resolve(false);
+        window.clearTimeout(timer);
+        finish(false);
       }
     });
   }
@@ -2042,6 +2061,32 @@
   function makeId(prefix) {
     if (globalThis.crypto?.randomUUID) return `${prefix}_${globalThis.crypto.randomUUID()}`;
     return `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  }
+
+  function once(callback) {
+    let called = false;
+    return (value) => {
+      if (called) return;
+      called = true;
+      callback(value);
+    };
+  }
+
+  function withTimeout(promise, timeoutMs, fallbackValue) {
+    return new Promise((resolve) => {
+      const finish = once(resolve);
+      const timer = window.setTimeout(() => finish(fallbackValue), timeoutMs);
+
+      Promise.resolve(promise)
+        .then((value) => {
+          window.clearTimeout(timer);
+          finish(value);
+        })
+        .catch(() => {
+          window.clearTimeout(timer);
+          finish(fallbackValue);
+        });
+    });
   }
 
   function chunkText(text, size) {
