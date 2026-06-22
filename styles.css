@@ -625,7 +625,7 @@ h2 {
 .field select {
   width: 100%;
   min-width: 0;
-  max-width: 100%;
+
   min-height: 52px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
