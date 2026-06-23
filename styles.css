@@ -50,6 +50,8 @@ html {
 }
 
 body {
+  width: 100%;
+  max-width: 100vw;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
@@ -113,14 +115,18 @@ p {
 .app-shell {
   width: min(1320px, 100%);
   margin: 0 auto;
-  padding: max(var(--space-5), env(safe-area-inset-top)) var(--space-5)
-    max(var(--space-7), env(safe-area-inset-bottom));
+  overflow-x: clip;
+  padding: max(var(--space-4), env(safe-area-inset-top)) var(--space-5)
+    calc(92px + env(safe-area-inset-bottom));
 }
 
 .topbar {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-4);
-  padding: var(--space-3) 0 var(--space-6);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-2) 0 var(--space-5);
 }
 
 .brand-block {
@@ -138,8 +144,8 @@ p {
 h1 {
   margin-top: var(--space-1);
   max-width: 100%;
-  font-size: clamp(2.1rem, 7vw, 4rem);
-  line-height: 0.95;
+  font-size: clamp(1.8rem, 8vw, 3.4rem);
+  line-height: 1;
   letter-spacing: 0;
 }
 
@@ -163,6 +169,12 @@ h2 {
   align-items: center;
 }
 
+.top-actions {
+  width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
 .sync-pill,
 .panel-kicker,
 #form-currency-badge {
@@ -177,6 +189,12 @@ h2 {
   font-size: 0.78rem;
   font-weight: 850;
   white-space: nowrap;
+}
+
+.sync-pill {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sync-pill.is-ok {
@@ -223,6 +241,15 @@ h2 {
   padding: 0 14px;
 }
 
+.ghost-button,
+.secondary-button,
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .icon-button,
 .entry-delete {
   width: 44px;
@@ -242,10 +269,41 @@ h2 {
   transform: translateY(1px);
 }
 
+.primary-button:disabled,
+.secondary-button:disabled,
+.ghost-button:disabled,
+.icon-button:disabled,
+.swap-button:disabled,
+.entry-delete:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  transform: none;
+}
+
 .dashboard-grid,
 .workspace {
   display: grid;
   gap: var(--space-5);
+}
+
+.tab-panel {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.screen-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.screen-heading h2 {
+  margin-top: 2px;
+  font-size: clamp(1.35rem, 5vw, 2rem);
+  line-height: 1.05;
+  max-width: 100%;
 }
 
 .dashboard-grid {
@@ -259,6 +317,7 @@ h2 {
 .entry-form,
 .history-panel,
 .backup-panel,
+.settings-panel,
 .modal-panel {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -308,7 +367,8 @@ h2 {
 .chart-panel,
 .entry-form,
 .history-panel,
-.backup-panel {
+.backup-panel,
+.settings-panel {
   padding: var(--space-6);
   overflow: hidden;
 }
@@ -431,7 +491,9 @@ h2 {
 .accounts-panel,
 .chart-panel,
 .workspace,
-.backup-panel {
+.backup-panel,
+.settings-panel,
+.analytics-summary-grid {
   margin-top: var(--space-5);
 }
 
@@ -573,11 +635,13 @@ h2 {
 }
 
 .filters {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   width: 100%;
 }
 
 .chart-filters {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   max-width: 360px;
 }
@@ -607,6 +671,11 @@ h2 {
   text-align: center;
   overflow-wrap: normal;
   word-break: normal;
+  flex: 1 1 96px;
+}
+
+.chart-filters .filter-button {
+  flex: initial;
 }
 
 .type-switch input:checked + span,
@@ -621,7 +690,8 @@ h2 {
 .exchange-grid,
 .fuel-grid,
 .settings-grid,
-.account-create-grid {
+.account-create-grid,
+.turnover-create-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-4);
@@ -654,6 +724,46 @@ h2 {
   color: var(--ink);
   outline: 0;
   padding: 0 var(--space-4);
+}
+
+.field input:disabled,
+.field select:disabled {
+  background: #eef3f6;
+  color: var(--muted);
+}
+
+.toggle-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: var(--space-4);
+}
+
+.toggle-field input {
+  width: 44px;
+  height: 26px;
+  min-height: 0;
+  flex: 0 0 auto;
+  accent-color: var(--teal);
+}
+
+.toggle-field span {
+  display: grid;
+  gap: 3px;
+}
+
+.toggle-field strong {
+  font-size: 0.96rem;
+}
+
+.toggle-field small {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .field small {
@@ -769,6 +879,31 @@ h2 {
   margin-top: var(--space-5);
 }
 
+.history-pagination {
+  display: grid;
+  grid-template-columns: minmax(86px, 1fr) auto minmax(86px, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  margin-top: var(--space-4);
+}
+
+.history-pagination[hidden] {
+  display: none;
+}
+
+.history-pagination .ghost-button {
+  min-height: 44px;
+  padding-inline: var(--space-4);
+}
+
+#history-page-info {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 850;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .entry-item {
   display: grid;
   grid-template-columns: 8px minmax(0, 1fr) 44px;
@@ -844,6 +979,10 @@ h2 {
 
 .entry-amount.is-negative {
   color: var(--rose);
+}
+
+.entry-amount.is-neutral {
+  color: var(--muted);
 }
 
 .entry-amount--exchange {
@@ -951,8 +1090,102 @@ h2 {
   margin-bottom: var(--space-5);
 }
 
+.debt-history {
+  margin-bottom: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: var(--space-4);
+}
+
+.debt-history[hidden] {
+  display: none;
+}
+
+.debt-history h3 {
+  margin: 0 0 var(--space-3);
+  font-size: 0.95rem;
+}
+
+.debt-history-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.debt-history-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  border-top: 1px solid rgba(216, 227, 236, 0.72);
+  padding-top: var(--space-2);
+}
+
+.debt-history-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.debt-history-row strong,
+.debt-history-row span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.debt-history-row span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.debt-history-row b {
+  white-space: nowrap;
+}
+
 .debt-rule-note {
   margin-top: var(--space-4);
+}
+
+.debt-settlement-rows {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.debt-settlement-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: end;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: var(--space-3);
+}
+
+.debt-settlement-row .field span {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.debt-settlement-row .entry-delete {
+  grid-column: auto;
+  grid-row: auto;
+  justify-self: end;
+}
+
+.debt-add-split-button {
+  margin-top: var(--space-3);
+}
+
+.debt-add-split-button[hidden] {
+  display: none;
+}
+
+.debt-close-toggle {
+  align-self: stretch;
 }
 
 .empty-state {
@@ -973,6 +1206,354 @@ h2 {
 .backup-panel {
   align-items: stretch;
   flex-direction: column;
+}
+
+.analytics-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.metric-card {
+  display: grid;
+  gap: var(--space-2);
+  min-height: 92px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  padding: var(--space-4);
+  box-shadow: 0 12px 28px rgba(21, 32, 43, 0.07);
+}
+
+.metric-card span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.metric-card strong {
+  align-self: end;
+  font-size: clamp(1.15rem, 5vw, 1.7rem);
+  line-height: 1;
+}
+
+.turnover-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.turnover-card {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.92);
+  padding: var(--space-4);
+  box-shadow: var(--shadow);
+}
+
+.turnover-card-head,
+.turnover-investor-head,
+.turnover-subhead,
+.turnover-repayment-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.turnover-card-head h3 {
+  margin: var(--space-2) 0 0;
+  font-size: clamp(1.15rem, 5vw, 1.65rem);
+  line-height: 1.05;
+}
+
+.turnover-card-head > div {
+  min-width: 0;
+}
+
+.turnover-card-head .entry-delete {
+  flex: 0 0 auto;
+}
+
+.turnover-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.turnover-metrics div {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: var(--space-3);
+}
+
+.turnover-metrics span,
+.turnover-subhead span,
+.turnover-investor-head span,
+.turnover-repayment-row span,
+.turnover-participant-row small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 820;
+}
+
+.turnover-metrics strong {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: clamp(0.95rem, 4vw, 1.25rem);
+  line-height: 1.05;
+}
+
+.turnover-section {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  border-top: 1px solid rgba(102, 112, 133, 0.16);
+  padding-top: var(--space-4);
+}
+
+.turnover-subhead {
+  align-items: center;
+}
+
+.turnover-subhead h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.turnover-warning {
+  border: 1px solid rgba(183, 121, 31, 0.24);
+  border-radius: 999px;
+  background: var(--amber-soft);
+  color: var(--amber) !important;
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+
+.turnover-participants,
+.turnover-investors,
+.turnover-repayments,
+.turnover-contributions {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.turnover-participant-row {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: var(--space-3);
+}
+
+.turnover-participant-head,
+.turnover-share-control {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.turnover-participant-head {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.turnover-participant-head span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.turnover-participant-head > b {
+  color: var(--teal);
+  text-align: right;
+}
+
+.turnover-share-control {
+  grid-template-columns: auto minmax(118px, 1fr) 46px;
+  align-items: center;
+}
+
+.turnover-share-control span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.turnover-participant-row input[type="range"] {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--teal);
+}
+
+.turnover-share-control b {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.turnover-paid-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(216, 227, 236, 0.86);
+}
+
+.turnover-paid-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--teal);
+}
+
+.turnover-contribution-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: var(--space-3);
+}
+
+.turnover-contribution-row span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 820;
+}
+
+.turnover-contribution-row b {
+  white-space: nowrap;
+}
+
+.turnover-inline-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.turnover-inline-form--investor,
+.turnover-inline-form--repay {
+  grid-template-columns: minmax(0, 1fr) minmax(112px, 0.6fr) auto;
+}
+
+.turnover-inline-form--repay {
+  grid-template-columns: minmax(0, 1fr) minmax(96px, 0.55fr) minmax(132px, 0.65fr) auto;
+}
+
+.turnover-inline-form--contribution {
+  grid-template-columns: minmax(112px, 0.7fr) minmax(132px, 0.7fr) auto;
+}
+
+.turnover-inline-form input,
+.turnover-inline-form select {
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  outline: 0;
+  padding: 0 var(--space-3);
+}
+
+.turnover-inline-form input:focus,
+.turnover-inline-form select:focus {
+  border-color: rgba(15, 118, 110, 0.72);
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+}
+
+.turnover-investor,
+.turnover-repayment-row {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: var(--space-3);
+}
+
+.turnover-investor {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.turnover-investor-head > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.turnover-investor-head > b {
+  color: var(--teal);
+  text-align: right;
+}
+
+.turnover-repayment-row {
+  align-items: center;
+  background: #fff;
+}
+
+.turnover-repayment-row b {
+  white-space: nowrap;
+}
+
+.bottom-tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  width: 100vw;
+  max-width: 100vw;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 3px;
+  border-top: 1px solid rgba(216, 227, 236, 0.96);
+  background: rgba(255, 255, 255, 0.94);
+  padding: 7px max(8px, env(safe-area-inset-left))
+    max(7px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right));
+  box-shadow: 0 -18px 40px rgba(21, 32, 43, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.bottom-tab {
+  display: grid;
+  place-items: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 56px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 850;
+}
+
+.bottom-tab span {
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.bottom-tab .ui-icon {
+  width: 19px;
+  height: 19px;
+}
+
+.bottom-tab.is-active {
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 
 .modal-backdrop {
@@ -1059,8 +1640,29 @@ h2 {
   .entry-form,
   .history-panel,
   .backup-panel,
+  .settings-panel,
   .modal-panel {
     padding: var(--space-3);
+  }
+
+  .topbar {
+    align-items: stretch;
+  }
+
+  .top-actions .ghost-button {
+    width: 44px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .top-actions .sync-pill {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .top-actions .ghost-button .ui-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .accounts-panel .secondary-button,
@@ -1079,13 +1681,18 @@ h2 {
   }
 
   .filters {
-    grid-template-columns: repeat(3, minmax(70px, 1fr));
+    width: 100%;
   }
 
   .form-grid,
   .fuel-grid,
-  .settings-grid {
+  .settings-grid,
+  .turnover-create-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .analytics-summary-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .entry-item {
@@ -1114,11 +1721,12 @@ h2 {
   }
 
   .topbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
+    flex-direction: row;
+    align-items: flex-start;
   }
 
   .top-actions {
+    width: auto;
     justify-content: flex-end;
   }
 
@@ -1161,7 +1769,8 @@ h2 {
   }
 
   .form-grid,
-  .settings-grid {
+  .settings-grid,
+  .turnover-create-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -1181,7 +1790,6 @@ h2 {
   }
 
   .filters {
-    grid-template-columns: repeat(7, minmax(70px, 1fr));
     width: auto;
   }
 
@@ -1240,6 +1848,49 @@ h2 {
   }
 }
 
+@media (min-width: 960px) {
+  .bottom-tabs {
+    left: 50%;
+    right: auto;
+    bottom: var(--space-5);
+    width: min(620px, calc(100% - 48px));
+    transform: translateX(-50%);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 720px) {
+  .turnover-metrics,
+  .turnover-participant-head,
+  .turnover-share-control,
+  .turnover-inline-form,
+  .turnover-inline-form--investor,
+  .turnover-inline-form--contribution,
+  .turnover-inline-form--repay {
+    grid-template-columns: 1fr;
+  }
+
+  .turnover-participant-head > b,
+  .turnover-share-control b,
+  .turnover-investor-head > b {
+    text-align: left;
+  }
+
+  .turnover-investor-head,
+  .turnover-subhead,
+  .turnover-repayment-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .turnover-inline-form .secondary-button,
+  .turnover-inline-form .ghost-button {
+    width: 100%;
+  }
+}
+
 @media (min-width: 1100px) {
   .app-shell {
     padding-inline: var(--space-8);
@@ -1248,4 +1899,8 @@ h2 {
   .dashboard-grid {
     grid-template-columns: minmax(0, 1.35fr) minmax(460px, 0.65fr);
   }
+}
+
+.modal-panel .debt-settlement-row {
+  grid-template-columns: minmax(0, 1fr);
 }

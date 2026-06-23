@@ -1,0 +1,13 @@
+{
+  "name": "master-of-coin-mini-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-html.js && tsc --noEmit && esbuild src/main.ts --bundle --format=iife --target=es2020 --outfile=app.js",
+    "dev": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.5",
+    "typescript": "^5.8.3"
+  }
+}

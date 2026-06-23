@@ -1,0 +1,75 @@
+<div class="modal-backdrop" id="debt-modal" hidden>
+  <section
+    class="modal-panel debt-modal-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="debt-modal-title"
+  >
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Борг</p>
+        <h2 id="debt-modal-title">Розрахунок</h2>
+      </div>
+      <button class="icon-button" type="button" id="close-debt-modal" aria-label="Закрити">
+        ×
+      </button>
+    </div>
+
+    <p class="debt-summary" id="debt-modal-summary"></p>
+    <section class="debt-history" id="debt-settlement-history" hidden></section>
+    <form id="debt-settlement-form" autocomplete="off">
+      <div class="debt-settlement-rows" id="debt-settlement-rows">
+        <div class="debt-settlement-row" data-debt-settlement-row>
+          <label class="field debt-settlement-note-field">
+            <span id="debt-settlement-note-label">Хто повернув</span>
+            <input
+              id="debt-settlement-note-input"
+              data-debt-settlement-note
+              type="text"
+              placeholder="Імʼя або нотатка"
+            />
+          </label>
+          <label class="field">
+            <span id="debt-settlement-amount-label">Сума</span>
+            <input
+              id="debt-settlement-amount"
+              data-debt-settlement-amount
+              type="text"
+              inputmode="decimal"
+              placeholder="0"
+            />
+          </label>
+          <label class="field">
+            <span id="debt-settlement-account-label">Рахунок</span>
+            <select id="debt-settlement-account" data-debt-settlement-account></select>
+          </label>
+        </div>
+      </div>
+      <button
+        class="secondary-button debt-add-split-button"
+        type="button"
+        id="add-debt-settlement-row"
+      >
+        Додати ще рахунок
+      </button>
+      <div class="settings-grid">
+        <label class="field">
+          <span>Дата</span>
+          <input id="debt-settlement-date" type="date" required />
+        </label>
+        <label class="toggle-field debt-close-toggle">
+          <input id="debt-close-toggle" type="checkbox" />
+          <span>
+            <strong>Позначити борг закритим</strong>
+            <small>Якщо вимкнено, сума буде записана, але борг лишиться відкритим.</small>
+          </span>
+        </label>
+      </div>
+      <p class="debt-rule-note" id="debt-settlement-note"></p>
+      <div class="form-actions">
+        <p class="form-message" id="debt-settlement-message" role="status"></p>
+        <button class="primary-button" type="submit">Зберегти розрахунок</button>
+      </div>
+    </form>
+  </section>
+</div>

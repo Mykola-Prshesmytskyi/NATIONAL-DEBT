@@ -3,6 +3,7 @@ const path = require("node:path");
 const zlib = require("node:zlib");
 
 const root = path.resolve(__dirname, "..");
+const iconsDir = path.join(root, "assets", "icons");
 
 const COLORS = {
   transparent: [0, 0, 0, 0],
@@ -24,12 +25,14 @@ const outputs = [
   ["icon-512.png", 512],
 ];
 
+fs.mkdirSync(iconsDir, { recursive: true });
+
 for (const [filename, size] of outputs) {
-  fs.writeFileSync(path.join(root, filename), createPng(size));
+  fs.writeFileSync(path.join(iconsDir, filename), createPng(size));
 }
 
 fs.writeFileSync(
-  path.join(root, "favicon.ico"),
+  path.join(iconsDir, "favicon.ico"),
   createIco([
     ["favicon-16.png", 16],
     ["favicon-32.png", 32],
@@ -40,7 +43,7 @@ fs.writeFileSync(
 function createIco(entries) {
   const images = entries.map(([filename, size]) => ({
     size,
-    data: fs.readFileSync(path.join(root, filename)),
+    data: fs.readFileSync(path.join(iconsDir, filename)),
   }));
   const headerSize = 6 + images.length * 16;
   let offset = headerSize;

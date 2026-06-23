@@ -1,4 +1,4 @@
-# National Debt Telegram Mini App
+# Master of Coin Telegram Mini App
 
 Міні-апка для персонального обліку витрат і доходів.
 
@@ -12,7 +12,7 @@
 - борги в обидві сторони: "мені винні" або "я винен", з фото чека;
 - закриття боргу без денного ліміту, а різниця списується з денного ліміту;
 - графік витрат за тиждень, місяць і пів року;
-- favicon, Apple touch icon, Windows tile і PWA-іконки з `site.webmanifest`;
+- favicon, Apple touch icon, Windows tile і PWA-іконки в `assets/icons/` з `site.webmanifest`;
 - автозбереження в `localStorage`;
 - додаткове збереження в Telegram `DeviceStorage`/`CloudStorage`, якщо апка відкрита всередині Telegram;
 - експорт та імпорт JSON backup.
@@ -20,6 +20,25 @@
 ## Запуск
 
 Це статичний застосунок. Можна відкрити `index.html` у браузері або роздати папку через будь-який HTTPS-хостинг і вказати URL у налаштуваннях Telegram бота.
+
+Вихідний код застосунку лежить у `src/` і пишеться на TypeScript. Файл `app.js` у корені генерується командою build і підключається в `index.html`. HTML теж збирається з partials у `src/html/`, щоб не тримати всю розмітку в одному великому файлі.
+
+Структура:
+
+- `src/main.ts` — контролер застосунку: події, модалки, render flow;
+- `src/html/` — layout і HTML-partials для екранів, іконок, модалок і datalist;
+- `src/domain/` — бізнес-розрахунки: баланси, бюджети, борги, графік;
+- `src/state/` — дефолтний стан, міграції, нормалізація даних;
+- `src/infrastructure/` — Telegram API, storage, обробка фото чеків;
+- `src/ui/` — DOM-елементи, шаблони HTML і дрібні UI-хелпери;
+- `src/utils/` — форматування, дати, числа, sanitizing, async-хелпери.
+
+Після зміни TypeScript-файлів збери `app.js`:
+
+```bash
+npm install
+npm run build
+```
 
 Для локального перегляду:
 
@@ -35,7 +54,7 @@ http://localhost:8080
 
 ## Іконки
 
-Джерело логотипа лежить у `assets/logo.svg`. PNG та ICO можна перегенерувати командою:
+Джерело логотипа лежить у `assets/icons/logo.svg`. PNG та ICO можна перегенерувати командою:
 
 ```bash
 node scripts/generate-icons.js
