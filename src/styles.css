@@ -1,0 +1,1331 @@
+@tailwind base;
+@tailwind components;
+
+:root {
+  color-scheme: light;
+  --bg: #eef4f8;
+  --surface: #ffffff;
+  --surface-soft: #f4f8fb;
+  --ink: #15202b;
+  --muted: #667085;
+  --line: #d8e3ec;
+  --teal: #0f766e;
+  --teal-soft: #d9f5ef;
+  --blue: #2563eb;
+  --blue-soft: #dbeafe;
+  --rose: #e11d48;
+  --rose-soft: #ffe4ea;
+  --amber: #b7791f;
+  --amber-soft: #fff3cf;
+  --fuel: #c05621;
+  --fuel-soft: #fff1e8;
+  --violet: #6d5dfc;
+  --shadow: 0 20px 48px rgba(21, 32, 43, 0.1);
+}
+
+* {
+  @apply box-border;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  @apply bg-bg;
+}
+
+body {
+  @apply m-0 min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-bg font-sans text-ink;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(238, 244, 248, 0.65)
+    ),
+    var(--bg);
+}
+
+body.modal-open {
+  @apply overflow-hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+h1,
+h2,
+p,
+strong,
+b,
+span {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+p {
+  @apply m-0;
+}
+
+h1 {
+  @apply mt-1 max-w-full text-[clamp(1.8rem,8vw,3.4rem)] font-bold leading-none tracking-normal;
+}
+
+h2 {
+  @apply text-base font-bold tracking-normal;
+}
+
+.icon-sprite {
+  @apply absolute h-0 w-0 overflow-hidden;
+}
+
+.ui-icon {
+  @apply h-[18px] w-[18px] flex-[0_0_auto];
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.app-shell {
+  @apply mx-auto max-w-full overflow-x-clip;
+  width: min(1320px, 100%);
+  padding: max(16px, env(safe-area-inset-top)) 20px
+    calc(92px + env(safe-area-inset-bottom));
+}
+
+.topbar {
+  @apply flex flex-col items-start justify-between gap-4 pb-5 pt-2;
+}
+
+.brand-block {
+  @apply min-w-0;
+}
+
+.eyebrow {
+  @apply text-[0.78rem] font-850 uppercase tracking-normal text-muted;
+}
+
+.start-line {
+  @apply mt-3 text-[0.92rem] font-750 text-muted;
+}
+
+.top-actions,
+.backup-actions {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.top-actions {
+  @apply w-full min-w-0 justify-start;
+}
+
+.sync-pill,
+.panel-kicker,
+#form-currency-badge {
+  @apply inline-flex min-h-8 items-center whitespace-nowrap rounded-full border border-line bg-white/80 px-[11px] py-[6px] text-[0.78rem] font-850 text-muted;
+}
+
+.sync-pill {
+  @apply max-w-full overflow-hidden text-ellipsis;
+}
+
+.sync-pill.is-ok {
+  @apply border-teal/25 bg-teal-soft text-teal;
+}
+
+.sync-pill.is-warn {
+  @apply border-amber/30 bg-amber-soft text-amber;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button,
+.icon-button,
+.swap-button,
+.entry-delete {
+  @apply min-h-11 rounded-app font-black;
+}
+
+.ghost-button,
+.secondary-button,
+.primary-button {
+  @apply inline-flex items-center justify-center;
+}
+
+.primary-button {
+  @apply border-0 bg-ink px-[18px] text-white;
+}
+
+.secondary-button {
+  @apply border-0 bg-teal px-[15px] text-white;
+}
+
+.ghost-button {
+  @apply border border-line bg-white/75 px-[14px] text-ink;
+}
+
+.icon-button,
+.entry-delete {
+  @apply w-11 border border-line bg-surface-soft text-[1.35rem] leading-none text-muted;
+}
+
+.primary-button:active,
+.secondary-button:active,
+.ghost-button:active,
+.icon-button:active,
+.swap-button:active,
+.entry-delete:active {
+  @apply translate-y-px;
+}
+
+.primary-button:disabled,
+.secondary-button:disabled,
+.ghost-button:disabled,
+.icon-button:disabled,
+.swap-button:disabled,
+.entry-delete:disabled {
+  @apply cursor-not-allowed opacity-50;
+  transform: none;
+}
+
+.dashboard-grid,
+.workspace,
+.tab-panel {
+  @apply grid gap-5;
+}
+
+.screen-heading {
+  @apply flex min-w-0 items-end justify-between gap-4;
+}
+
+.screen-heading > div {
+  @apply min-w-0 max-w-full flex-1;
+}
+
+.screen-heading h2 {
+  @apply mt-0.5 max-w-full text-[clamp(1.35rem,5vw,2rem)] leading-[1.05];
+}
+
+.budget-hero,
+.budget-panel,
+.accounts-panel,
+.chart-panel,
+.entry-form,
+.history-panel,
+.backup-panel,
+.settings-panel,
+.modal-panel {
+  @apply min-w-0 rounded-app border border-line bg-white/90 shadow-panel;
+}
+
+.budget-hero {
+  @apply overflow-hidden p-6 text-white;
+  background:
+    linear-gradient(135deg, rgba(21, 32, 43, 0.98), rgba(15, 118, 110, 0.92)),
+    var(--ink);
+}
+
+.budget-hero .panel-kicker {
+  @apply border-white/20 bg-white/10 text-white/85;
+}
+
+.budget-hero #days-count {
+  @apply mb-2 block min-h-0 w-max border-0 bg-transparent p-0 text-[0.78rem] leading-[1.1] text-white/70;
+}
+
+.budget-hero .progress-track {
+  @apply bg-white/15;
+}
+
+.budget-hero .progress-bar {
+  @apply bg-[#84f3d7];
+}
+
+.budget-panel,
+.accounts-panel,
+.chart-panel,
+.entry-form,
+.history-panel,
+.backup-panel,
+.settings-panel {
+  @apply overflow-hidden p-6;
+}
+
+.budget-panel--subs {
+  @apply border-blue/20;
+}
+
+.panel-head,
+.section-heading,
+.form-actions,
+.backup-panel {
+  @apply flex flex-col items-start justify-between gap-4;
+}
+
+.section-heading > div,
+.panel-head > div {
+  @apply min-w-0;
+}
+
+.section-heading--wrap {
+  @apply flex-wrap;
+}
+
+.section-heading p,
+.backup-panel p {
+  @apply mt-1 text-[0.88rem] font-bold text-muted;
+}
+
+.panel-head {
+  @apply grid grid-cols-[minmax(0,1fr)] items-start;
+}
+
+.panel-head strong {
+  @apply mt-3 whitespace-normal text-left text-[clamp(2.05rem,8vw,4rem)] leading-[0.95] tracking-normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-stats {
+  @apply mt-6 grid grid-cols-3 gap-4;
+}
+
+.budget-stats div,
+.budget-row {
+  @apply border-t border-muted/15 pt-3;
+}
+
+.budget-stats span,
+.budget-row span,
+.currency-pill span,
+.account-card span,
+.account-card small,
+.settings-account-row span {
+  @apply text-[0.82rem] font-750 text-muted;
+}
+
+.budget-hero .budget-stats span {
+  @apply text-white/70;
+}
+
+.budget-stats b {
+  @apply mt-1 block text-[0.95rem];
+}
+
+.budget-row {
+  @apply mt-5 flex justify-between gap-5;
+}
+
+.progress-track {
+  @apply mt-6 h-2.5 overflow-hidden rounded-full bg-surface-soft;
+}
+
+.progress-bar {
+  @apply h-full w-0 rounded-[inherit] bg-teal;
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+#subs-progress {
+  @apply bg-blue;
+}
+
+.progress-bar.is-over {
+  @apply bg-rose;
+}
+
+.accounts-panel,
+.chart-panel,
+.workspace,
+.backup-panel,
+.settings-panel,
+.analytics-summary-grid {
+  @apply mt-5;
+}
+
+.currency-strip {
+  @apply mt-5 flex gap-4 overflow-x-auto pb-0.5;
+  scroll-snap-type: x proximity;
+}
+
+.currency-pill {
+  @apply flex-[0_0_min(220px,72vw)] rounded-app border border-line bg-surface-soft p-4;
+  scroll-snap-align: start;
+}
+
+.currency-pill strong {
+  @apply mt-2 block text-[1.35rem] leading-[1.05];
+}
+
+.accounts-list {
+  @apply mt-5 grid gap-4;
+}
+
+.account-card {
+  @apply flex min-w-0 justify-between gap-4 rounded-app border border-line bg-white p-4;
+}
+
+.account-card strong,
+.settings-account-row strong {
+  @apply mt-[3px] block;
+}
+
+.account-card div:last-child {
+  @apply text-right;
+}
+
+.account-card b {
+  @apply block text-[1.15rem];
+}
+
+.account-card small {
+  @apply mt-1 block;
+}
+
+.chart-wrap {
+  @apply mt-5 w-full overflow-hidden rounded-app border border-line;
+  background: linear-gradient(180deg, #ffffff, #f7fbfd);
+}
+
+#expense-chart {
+  @apply block min-h-[210px] w-full;
+}
+
+.chart-area {
+  fill: url("#chartFill");
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--teal);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.chart-bars rect {
+  fill: rgba(15, 118, 110, 0.16);
+}
+
+.chart-grid-line {
+  stroke: #d8e3ec;
+  stroke-width: 2;
+}
+
+.chart-label,
+.chart-value {
+  @apply text-lg font-extrabold;
+  fill: var(--muted);
+}
+
+.chart-label--end {
+  text-anchor: end;
+}
+
+.workspace {
+  @apply grid-cols-1;
+}
+
+.type-switch,
+.filters,
+.debt-mode {
+  @apply grid gap-2 rounded-app border border-line bg-surface-soft p-[6px];
+}
+
+.type-switch {
+  @apply my-5 grid-cols-[repeat(auto-fit,minmax(104px,1fr))];
+}
+
+.debt-options,
+.fuel-options {
+  @apply mb-4;
+}
+
+.debt-mode {
+  @apply grid-cols-2;
+}
+
+.filters {
+  @apply flex w-full flex-wrap;
+}
+
+.chart-filters {
+  @apply grid max-w-[360px] grid-cols-3;
+}
+
+.type-switch input,
+.debt-mode input {
+  @apply pointer-events-none absolute opacity-0;
+}
+
+.type-switch span,
+.debt-mode span,
+.filter-button {
+  @apply flex min-h-10 flex-[1_1_96px] items-center justify-center gap-[7px] rounded-md border-0 bg-transparent px-2.5 text-center text-[inherit] font-850 leading-[1.1] text-muted;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.chart-filters .filter-button {
+  @apply flex-initial;
+}
+
+.type-switch input:checked + span,
+.debt-mode input:checked + span,
+.filter-button.is-active {
+  @apply bg-white text-ink shadow-control;
+}
+
+.form-grid,
+.exchange-grid,
+.fuel-grid,
+.settings-grid,
+.account-create-grid,
+.turnover-create-grid {
+  @apply grid grid-cols-1 gap-4;
+}
+
+.field {
+  @apply grid min-w-0 gap-2;
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.field span {
+  @apply text-[0.84rem] font-extrabold text-muted;
+}
+
+.field input,
+.field select {
+  @apply min-h-[52px] min-w-0 rounded-app border border-line bg-white px-4 text-ink outline-0;
+}
+
+.field input:disabled,
+.field select:disabled {
+  @apply bg-[#eef3f6] text-muted;
+}
+
+.toggle-field {
+  @apply flex min-h-16 items-center gap-3 rounded-app border border-line bg-surface-soft p-4;
+}
+
+.toggle-field input {
+  @apply h-[26px] min-h-0 w-11 flex-[0_0_auto] accent-teal;
+}
+
+.toggle-field span {
+  @apply grid gap-[3px];
+}
+
+.toggle-field strong {
+  @apply text-[0.96rem];
+}
+
+.toggle-field small,
+.field small {
+  @apply text-[0.82rem] font-bold text-muted;
+}
+
+.field small {
+  @apply text-[0.8rem];
+}
+
+.debt-receipt-field {
+  @apply cursor-pointer;
+}
+
+.debt-receipt-field input {
+  @apply pointer-events-none absolute h-px w-px opacity-0;
+}
+
+.receipt-upload-button {
+  @apply flex min-h-[52px] items-center justify-center rounded-app border border-dashed border-line bg-surface-soft text-[0.95rem] font-black text-ink;
+}
+
+.debt-receipt-field:focus-within .receipt-upload-button,
+.field input:focus,
+.field select:focus,
+.turnover-inline-form input:focus,
+.turnover-inline-form select:focus {
+  @apply border-[rgba(15,118,110,0.72)] shadow-[0_0_0_4px_rgba(15,118,110,0.12)];
+}
+
+.fuel-grid {
+  @apply rounded-app border border-fuel/20 p-4;
+  background: linear-gradient(180deg, #fff, var(--fuel-soft));
+}
+
+.fuel-rule-note {
+  @apply flex min-h-[52px] items-center gap-2 rounded-app border border-fuel/20 bg-white/70 px-4 text-[0.86rem] font-black text-fuel;
+}
+
+.exchange-grid {
+  @apply relative;
+}
+
+.swap-button {
+  @apply w-[52px] justify-self-center border border-teal/25 bg-teal-soft text-[1.3rem] text-teal;
+}
+
+.rate-preview {
+  @apply mt-4 rounded-app border border-amber/20 bg-amber-soft p-3 font-850 text-amber;
+}
+
+.form-actions {
+  @apply mt-5 items-stretch;
+}
+
+.form-message {
+  @apply min-h-[22px] text-[0.9rem] font-750 text-muted;
+}
+
+.form-message.is-error {
+  @apply text-rose;
+}
+
+.entries-list {
+  @apply mt-5 grid gap-4;
+}
+
+.history-pagination {
+  @apply mt-4 grid grid-cols-[minmax(86px,1fr)_auto_minmax(86px,1fr)] items-center gap-3;
+}
+
+.history-pagination .ghost-button {
+  @apply min-h-11 px-4;
+}
+
+#history-page-info {
+  @apply whitespace-nowrap text-center text-[0.9rem] font-850 text-muted;
+}
+
+.entry-item {
+  @apply grid min-h-[84px] grid-cols-[8px_minmax(0,1fr)_44px] items-center gap-4 rounded-app border border-line bg-white p-4;
+}
+
+.entry-mark {
+  @apply h-12 w-2 rounded-full bg-rose;
+}
+
+.entry-item.is-income .entry-mark {
+  @apply bg-teal;
+}
+
+.entry-item.is-subscription .entry-mark {
+  @apply bg-blue;
+}
+
+.entry-item.is-fuel .entry-mark {
+  @apply bg-fuel;
+}
+
+.entry-item.is-exchange .entry-mark {
+  @apply bg-amber;
+}
+
+.entry-item.is-debt {
+  @apply cursor-pointer;
+}
+
+.entry-item.is-debt .entry-mark {
+  @apply bg-violet;
+}
+
+.entry-item.is-debt.is-closed {
+  @apply cursor-default;
+}
+
+.entry-main {
+  @apply min-w-0;
+}
+
+.entry-main strong {
+  @apply block;
+}
+
+.entry-main span {
+  @apply mt-1 block text-[0.82rem] font-bold text-muted;
+}
+
+.entry-amount {
+  @apply col-[2/-1] font-950 text-ink;
+}
+
+.entry-amount.is-positive {
+  @apply text-teal;
+}
+
+.entry-amount.is-negative {
+  @apply text-rose;
+}
+
+.entry-amount.is-neutral {
+  @apply text-muted;
+}
+
+.entry-amount--exchange {
+  @apply grid gap-1 text-amber;
+}
+
+.entry-delete {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.debt-extra,
+.fuel-extra {
+  @apply col-[2/-1] flex flex-wrap items-center gap-2;
+}
+
+.fuel-chip {
+  @apply inline-flex min-h-8 items-center gap-[6px] rounded-full border border-fuel/20 bg-fuel-soft px-2.5 py-[6px] text-[0.82rem] font-850 text-fuel;
+}
+
+.fuel-chip .ui-icon {
+  @apply h-4 w-4;
+}
+
+.fuel-chip--budget {
+  @apply border-teal/20 bg-teal-soft text-teal;
+}
+
+.debt-status,
+.debt-rule-note,
+.debt-summary {
+  @apply text-[0.84rem] font-extrabold text-muted;
+}
+
+.debt-status {
+  @apply rounded-full border border-line bg-surface-soft px-2.5 py-[6px];
+}
+
+.debt-status.is-writeoff {
+  @apply border-rose/20 bg-rose-soft text-rose;
+}
+
+.debt-status.is-closed {
+  @apply border-teal/20 bg-teal-soft text-teal;
+}
+
+.debt-settle-button {
+  @apply min-h-9 px-3;
+}
+
+.debt-receipt {
+  @apply block h-[54px] w-[74px] overflow-hidden rounded-app border border-line bg-surface-soft;
+}
+
+.debt-receipt img {
+  @apply block h-full w-full object-cover;
+}
+
+.debt-summary,
+.debt-history {
+  @apply mb-5;
+}
+
+.debt-history {
+  @apply rounded-app border border-line bg-surface-soft p-4;
+}
+
+.debt-history h3 {
+  @apply mb-3 mt-0 text-[0.95rem];
+}
+
+.debt-history-list {
+  @apply grid gap-2;
+}
+
+.debt-history-row {
+  @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-t border-line/70 pt-2;
+}
+
+.debt-history-row:first-child {
+  @apply border-t-0 pt-0;
+}
+
+.debt-history-row strong,
+.debt-history-row span {
+  @apply block;
+  overflow-wrap: anywhere;
+}
+
+.debt-history-row span {
+  @apply mt-0.5 text-[0.8rem] font-750 text-muted;
+}
+
+.debt-history-row b {
+  @apply whitespace-nowrap;
+}
+
+.debt-rule-note {
+  @apply mt-4;
+}
+
+.debt-settlement-rows {
+  @apply grid gap-3;
+}
+
+.debt-settlement-row {
+  @apply grid min-w-0 grid-cols-1 items-end gap-3 rounded-app border border-line bg-white p-3;
+}
+
+.debt-settlement-row .field span {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.debt-settlement-row .entry-delete {
+  grid-column: auto;
+  grid-row: auto;
+  justify-self: end;
+}
+
+.debt-add-split-button {
+  @apply mt-3;
+}
+
+.debt-close-toggle {
+  @apply self-stretch;
+}
+
+.empty-state {
+  @apply rounded-app border border-dashed border-line bg-white/60 p-5 text-center font-850 text-muted;
+  overflow-wrap: anywhere;
+}
+
+.currency-strip .empty-state {
+  @apply flex-[1_0_100%];
+}
+
+.backup-panel {
+  @apply items-stretch;
+}
+
+.analytics-summary-grid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.metric-card {
+  @apply grid min-h-[92px] gap-2 rounded-app border border-line bg-white/90 p-4 shadow-metric;
+}
+
+.metric-card span {
+  @apply text-[0.78rem] font-850 text-muted;
+}
+
+.metric-card strong {
+  @apply self-end text-[clamp(1.15rem,5vw,1.7rem)] leading-none;
+}
+
+.turnover-list {
+  @apply grid gap-4;
+}
+
+.turnover-card {
+  @apply grid min-w-0 gap-5 rounded-app border border-line bg-white/90 p-4 shadow-panel;
+}
+
+.turnover-card-head,
+.turnover-investor-head,
+.turnover-subhead,
+.turnover-repayment-row {
+  @apply flex min-w-0 items-start justify-between gap-3;
+}
+
+.turnover-card-head h3 {
+  @apply mb-0 mt-2 text-[clamp(1.15rem,5vw,1.65rem)] leading-[1.05];
+}
+
+.turnover-card-head > div {
+  @apply min-w-0;
+}
+
+.turnover-card-head .entry-delete {
+  @apply flex-[0_0_auto];
+}
+
+.turnover-metrics {
+  @apply grid grid-cols-3 gap-3;
+}
+
+.turnover-metrics div {
+  @apply min-w-0 rounded-app border border-line bg-surface-soft p-3;
+}
+
+.turnover-metrics span,
+.turnover-subhead span,
+.turnover-investor-head span,
+.turnover-repayment-row span,
+.turnover-participant-row small {
+  @apply text-[0.78rem] font-820 text-muted;
+}
+
+.turnover-metrics strong {
+  @apply mt-1 block text-[clamp(0.95rem,4vw,1.25rem)] leading-[1.05];
+}
+
+.turnover-section {
+  @apply grid min-w-0 gap-3 border-t border-muted/15 pt-4;
+}
+
+.turnover-subhead {
+  @apply items-center;
+}
+
+.turnover-subhead h4 {
+  @apply m-0 text-base;
+}
+
+.turnover-warning {
+  @apply whitespace-nowrap rounded-full border border-amber/25 bg-amber-soft px-[9px] py-[5px] text-amber;
+}
+
+.turnover-participants,
+.turnover-investors,
+.turnover-repayments,
+.turnover-contributions {
+  @apply grid min-w-0 gap-3;
+}
+
+.turnover-participant-row {
+  @apply grid min-w-0 gap-3 rounded-app border border-line bg-surface-soft p-3;
+}
+
+.turnover-participant-head,
+.turnover-share-control {
+  @apply grid min-w-0 gap-2;
+}
+
+.turnover-participant-head {
+  @apply grid-cols-[minmax(0,1fr)_auto] items-start;
+}
+
+.turnover-participant-head span {
+  @apply grid min-w-0 gap-[3px];
+}
+
+.turnover-participant-head > b {
+  @apply text-right text-teal;
+}
+
+.turnover-share-control {
+  @apply grid-cols-[auto_minmax(118px,1fr)_46px] items-center;
+}
+
+.turnover-share-control span {
+  @apply text-[0.78rem] font-850 text-muted;
+}
+
+.turnover-participant-row input[type="range"] {
+  @apply w-full min-w-0 accent-teal;
+}
+
+.turnover-share-control b {
+  @apply text-right tabular-nums;
+}
+
+.turnover-paid-track {
+  @apply h-2 overflow-hidden rounded-full bg-line/90;
+}
+
+.turnover-paid-bar {
+  @apply h-full w-0 rounded-[inherit] bg-teal;
+}
+
+.turnover-contribution-row {
+  @apply flex min-w-0 items-center justify-between gap-3 rounded-app border border-line bg-white p-3;
+}
+
+.turnover-contribution-row span {
+  @apply text-[0.78rem] font-820 text-muted;
+}
+
+.turnover-contribution-row b {
+  @apply whitespace-nowrap;
+}
+
+.turnover-inline-form {
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] gap-2;
+}
+
+.turnover-inline-form--investor,
+.turnover-inline-form--repay {
+  @apply grid-cols-[minmax(0,1fr)_minmax(112px,0.6fr)_auto];
+}
+
+.turnover-inline-form--repay {
+  @apply grid-cols-[minmax(0,1fr)_minmax(96px,0.55fr)_minmax(132px,0.65fr)_auto];
+}
+
+.turnover-inline-form--contribution {
+  @apply grid-cols-[minmax(112px,0.7fr)_minmax(132px,0.7fr)_auto];
+}
+
+.turnover-inline-form input,
+.turnover-inline-form select {
+  @apply min-h-11 min-w-0 rounded-app border border-line bg-white px-3 text-ink outline-0;
+}
+
+.turnover-investor,
+.turnover-repayment-row {
+  @apply min-w-0 rounded-app border border-line bg-surface-soft p-3;
+}
+
+.turnover-investor {
+  @apply grid gap-3;
+}
+
+.turnover-investor-head > div {
+  @apply grid min-w-0 gap-1;
+}
+
+.turnover-investor-head > b {
+  @apply text-right text-teal;
+}
+
+.turnover-repayment-row {
+  @apply items-center bg-white;
+}
+
+.turnover-repayment-row b {
+  @apply whitespace-nowrap;
+}
+
+.bottom-tabs {
+  @apply fixed inset-x-0 bottom-0 z-[15] grid w-screen max-w-[100vw] grid-cols-5 gap-[3px] overflow-hidden border-t border-line/95 bg-white/95 shadow-tabs backdrop-blur-[18px];
+  padding: 7px max(8px, env(safe-area-inset-left))
+    max(7px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-right));
+}
+
+.bottom-tab {
+  @apply grid min-h-14 min-w-0 place-items-center gap-[3px] rounded-app border-0 bg-transparent text-[0.66rem] font-850 text-muted;
+}
+
+.bottom-tab span {
+  @apply max-w-full whitespace-nowrap;
+}
+
+.bottom-tab .ui-icon {
+  @apply h-[19px] w-[19px];
+}
+
+.bottom-tab.is-active {
+  @apply bg-teal-soft text-teal;
+}
+
+.modal-backdrop {
+  @apply fixed inset-0 z-20 grid items-end bg-ink/40 px-5 pt-5;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+.modal-panel {
+  @apply mx-auto max-h-[min(92vh,820px)] overflow-auto p-6;
+  width: min(980px, 100%);
+}
+
+.modal-head {
+  @apply mb-5 flex items-start justify-between gap-3;
+}
+
+.modal-head h2 {
+  @apply mt-0.5 text-[1.3rem];
+}
+
+.modal-section {
+  @apply mt-6 border-t border-line pt-5;
+}
+
+.account-create-grid .secondary-button,
+.section-heading > .secondary-button {
+  @apply w-full max-w-full;
+}
+
+.settings-accounts-list {
+  @apply mt-5 grid gap-4;
+}
+
+.settings-account-row {
+  @apply grid grid-cols-[minmax(0,1fr)_110px_44px] items-end gap-4 rounded-app border border-line bg-surface-soft p-4;
+}
+
+.settings-account-row .field {
+  @apply gap-[6px];
+}
+
+.settings-account-row .field input {
+  @apply min-h-[42px];
+}
+
+@media (max-width: 639px) {
+  .app-shell {
+    @apply px-2;
+  }
+
+  .budget-stats {
+    @apply gap-3;
+  }
+
+  .budget-stats b {
+    @apply text-[0.9rem];
+  }
+
+  .screen-heading h2 {
+    @apply text-[1.28rem] leading-[1.08];
+  }
+
+  .budget-hero,
+  .budget-panel,
+  .accounts-panel,
+  .chart-panel,
+  .entry-form,
+  .history-panel,
+  .backup-panel,
+  .settings-panel,
+  .modal-panel {
+    @apply p-3;
+  }
+
+  .topbar {
+    @apply items-stretch;
+  }
+
+  .top-actions .ghost-button {
+    @apply w-11 p-0 text-[0];
+  }
+
+  .top-actions .sync-pill {
+    @apply min-w-0 flex-[1_1_auto];
+  }
+
+  .top-actions .ghost-button .ui-icon {
+    @apply h-5 w-5;
+  }
+
+  .accounts-panel .secondary-button,
+  .accounts-panel .empty-state {
+    @apply w-full max-w-full justify-self-stretch;
+  }
+}
+
+@media (min-width: 520px) {
+  .entry-form .section-heading,
+  .form-actions {
+    @apply flex-row items-center;
+  }
+
+  .filters {
+    @apply w-full;
+  }
+
+  .form-grid,
+  .fuel-grid,
+  .settings-grid,
+  .turnover-create-grid {
+    @apply grid-cols-3;
+  }
+
+  .analytics-summary-grid {
+    @apply grid-cols-4;
+  }
+
+  .entry-item {
+    @apply grid-cols-[10px_minmax(0,1fr)_auto_44px];
+  }
+
+  .entry-mark {
+    @apply w-2.5;
+  }
+
+  .entry-amount {
+    @apply col-auto whitespace-nowrap text-right;
+  }
+
+  .entry-delete {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (min-width: 640px) {
+  .app-shell {
+    @apply px-8;
+  }
+
+  .topbar {
+    @apply flex-row items-start;
+  }
+
+  .top-actions {
+    @apply w-auto justify-end;
+  }
+
+  .section-heading,
+  .backup-panel {
+    @apply flex-row items-center;
+  }
+
+  .section-heading > .secondary-button {
+    @apply w-auto;
+  }
+
+  .section-heading--wrap {
+    @apply items-start;
+  }
+
+  .dashboard-grid {
+    @apply grid-cols-[minmax(0,1fr)_minmax(340px,0.85fr)] gap-5;
+  }
+
+  .panel-head {
+    @apply grid-cols-[minmax(130px,1fr)_minmax(0,max-content)] items-start gap-x-6;
+  }
+
+  .panel-head strong {
+    @apply mt-0 whitespace-nowrap text-right;
+  }
+
+  .budget-panel .panel-head strong {
+    @apply text-[clamp(2.2rem,3.8vw,3.15rem)];
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .form-grid,
+  .settings-grid,
+  .turnover-create-grid {
+    @apply grid-cols-3;
+  }
+
+  .exchange-grid,
+  .account-create-grid {
+    @apply grid-cols-[1fr_0.8fr_52px_1fr_0.8fr] items-end;
+  }
+
+  .exchange-grid .field:nth-of-type(5),
+  .exchange-grid .field--wide {
+    grid-column: span 2;
+  }
+
+  .account-create-grid .secondary-button {
+    @apply self-end;
+  }
+
+  .filters {
+    @apply w-auto;
+  }
+
+  .chart-filters {
+    @apply grid-cols-[repeat(3,minmax(84px,1fr))];
+  }
+
+  .form-actions,
+  .backup-panel {
+    @apply flex-row items-center;
+  }
+
+  .primary-button,
+  .ghost-button {
+    @apply w-auto;
+  }
+
+  .entry-item {
+    @apply grid-cols-[10px_minmax(0,1fr)_auto_44px];
+  }
+
+  .entry-mark {
+    @apply w-2.5;
+  }
+
+  .entry-amount {
+    @apply col-auto whitespace-nowrap text-right;
+  }
+
+  .entry-delete {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .workspace {
+    @apply grid-cols-[minmax(380px,0.9fr)_minmax(0,1.1fr)] gap-5;
+  }
+
+  .accounts-list {
+    @apply grid-cols-2;
+  }
+
+  .modal-backdrop {
+    @apply items-center p-8;
+  }
+
+  .modal-panel {
+    @apply p-8;
+  }
+}
+
+@media (min-width: 960px) {
+  .bottom-tabs {
+    @apply right-auto bottom-5 left-1/2 rounded-[18px] border border-line p-2;
+    width: min(620px, calc(100% - 48px));
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 720px) {
+  .turnover-metrics,
+  .turnover-participant-head,
+  .turnover-share-control,
+  .turnover-inline-form,
+  .turnover-inline-form--investor,
+  .turnover-inline-form--contribution,
+  .turnover-inline-form--repay {
+    @apply grid-cols-1;
+  }
+
+  .turnover-participant-head > b,
+  .turnover-share-control b,
+  .turnover-investor-head > b {
+    @apply text-left;
+  }
+
+  .turnover-investor-head,
+  .turnover-subhead,
+  .turnover-repayment-row {
+    @apply flex-col items-stretch;
+  }
+
+  .turnover-inline-form .secondary-button,
+  .turnover-inline-form .ghost-button {
+    @apply w-full;
+  }
+}
+
+@media (min-width: 1100px) {
+  .app-shell {
+    @apply px-10;
+  }
+
+  .dashboard-grid {
+    @apply grid-cols-[minmax(0,1.35fr)_minmax(460px,0.65fr)];
+  }
+}
+
+.modal-panel .debt-settlement-row {
+  @apply grid-cols-1;
+}
+
+@tailwind utilities;

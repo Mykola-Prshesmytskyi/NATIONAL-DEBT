@@ -21,19 +21,20 @@
 
 Це статичний застосунок. Можна відкрити `index.html` у браузері або роздати папку через будь-який HTTPS-хостинг і вказати URL у налаштуваннях Telegram бота.
 
-Вихідний код застосунку лежить у `src/` і пишеться на TypeScript. Файл `app.js` у корені генерується командою build і підключається в `index.html`. HTML теж збирається з partials у `src/html/`, щоб не тримати всю розмітку в одному великому файлі.
+Вихідний код застосунку лежить у `src/` і пишеться на TypeScript. Файли `app.js` і `styles.css` у корені генеруються командою build і підключаються в `index.html`. HTML теж збирається з partials у `src/html/`, щоб не тримати всю розмітку в одному великому файлі. Стилі збираються Tailwind CSS із `src/styles.css`.
 
 Структура:
 
 - `src/main.ts` — контролер застосунку: події, модалки, render flow;
 - `src/html/` — layout і HTML-partials для екранів, іконок, модалок і datalist;
+- `src/styles.css` — Tailwind entrypoint і семантичні UI-класи через `@apply`;
 - `src/domain/` — бізнес-розрахунки: баланси, бюджети, борги, графік;
 - `src/state/` — дефолтний стан, міграції, нормалізація даних;
 - `src/infrastructure/` — Telegram API, storage, обробка фото чеків;
 - `src/ui/` — DOM-елементи, шаблони HTML і дрібні UI-хелпери;
 - `src/utils/` — форматування, дати, числа, sanitizing, async-хелпери.
 
-Після зміни TypeScript-файлів збери `app.js`:
+Після зміни TypeScript, HTML або стилів збери проект:
 
 ```bash
 npm install
@@ -43,7 +44,13 @@ npm run build
 Для локального перегляду:
 
 ```bash
-python3 -m http.server 8080
+npm run dev
+```
+
+Якщо порт `8080` зайнятий:
+
+```bash
+PORT=8081 npm run dev
 ```
 
 Після цього відкрий:
