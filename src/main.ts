@@ -163,6 +163,9 @@ class NationalDebtApp {
     );
     this.els.settingsForm.addEventListener("submit", (event) => this.handleSettingsSubmit(event));
     this.els.turnoverForm.addEventListener("submit", (event) => this.handleTurnoverSubmit(event));
+    this.els.turnoverCopySummary.addEventListener("click", () =>
+      void this.copyTurnoverSummary(),
+    );
     this.els.preferencesForm.addEventListener("submit", (event) =>
       this.handlePreferencesSubmit(event),
     );
@@ -958,6 +961,7 @@ class NationalDebtApp {
 
   private renderTurnover(): void {
     const projects = this.state.turnoverProjects || [];
+    this.els.turnoverCopySummary.disabled = !projects.length;
     if (!projects.length) {
       this.els.turnoverList.innerHTML = `<div class="empty-state">${this.tr(
         "Пропозицій ще немає",
@@ -968,6 +972,17 @@ class NationalDebtApp {
     this.els.turnoverList.innerHTML = projects
       .map((project) => this.renderTurnoverProject(project))
       .join("");
+  }
+
+  private async copyTurnoverSummary(): Promise<void> {
+    const projects = this.state.turnoverProjects || [];
+    if (!projects.length) {
+      this.showTurnoverMessage("Немає що копіювати", true);
+      return;
+    }
+
+    const ok = await this.copyTextToClipboard(this.makeTurnoverClipboardSummary(projects));
+    this.showTurnoverMessage(ok ? "Підсумок скопійовано" : "Не вдалося скопіювати", !ok);
   }
 
   private renderTurnoverProject(project: TurnoverProject): string {
@@ -1674,6 +1689,97 @@ class NationalDebtApp {
         )}</option>`;
       }),
     ].join("");
+  }
+
+  private makeTurnoverClipboardSummary(projects: TurnoverProject[]): string {
+    return projects
+      .map((project) => {
+        const directContributionTotal = project.participants.reduce(
+          (total, participant) => total + this.getTurnoverParticipantDirectContributed(participant),
+          0,
+        );
+        const investorTotal = project.investors.reduce(
+          (total, investor) => total + Number(investor.amount || 0),
+          0,
+        );
+        const fundedTotal = roundMoney(directContributionTotal + investorTotal);
+        const missing = Math.max(0, project.targetAmount - fundedTotal);
+        const lines = [
+          project.title,
+          this.tr("Потрібно: {amount}", {
+            amount: formatMoney(project.targetAmount, project.currency, this.language),
+          }),
+          this.tr("Зібрано: {amount}", {
+            amount: formatMoney(fundedTotal, project.currency, this.language),
+          }),
+          this.tr("Не вистачає: {amount}", {
+            amount: formatMoney(missing, project.currency, this.language),
+          }),
+          "",
+          `${this.tr("Учасники")}:`,
+          ...project.participants.map((participant) => {
+            const target = this.getTurnoverParticipantAmount(project, participant);
+            const paid = this.getTurnoverParticipantPaid(project, participant);
+            const remaining = Math.max(0, target - paid);
+            return this.tr("{name}: сплатив {paid}, ще {remaining}", {
+              name: participant.name,
+              paid: formatMoney(paid, project.currency, this.language),
+              remaining: formatMoney(remaining, project.currency, this.language),
+            });
+          }),
+          "",
+          `${this.tr("Інвестори")}:`,
+        ];
+
+        if (project.investors.length) {
+          lines.push(
+            ...project.investors.map((investor) => {
+              const returned = this.getTurnoverInvestorReturned(investor);
+              const remaining = Math.max(0, investor.amount - returned);
+              return this.tr("{name}: дав {amount}, повернулось {returned}, ще {remaining}", {
+                name: investor.name,
+                amount: formatMoney(investor.amount, project.currency, this.language),
+                returned: formatMoney(returned, project.currency, this.language),
+                remaining: formatMoney(remaining, project.currency, this.language),
+              });
+            }),
+          );
+        } else {
+          lines.push(this.tr("немає"));
+        }
+
+        return lines.join("\n");
+      })
+      .join("\n\n")
+      .replace(/\u00a0/g, " ");
+  }
+
+  private async copyTextToClipboard(text: string): Promise<boolean> {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        // Fall through to the textarea fallback.
+      }
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "true");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
+    document.body.append(textarea);
+    textarea.select();
+
+    try {
+      return document.execCommand("copy");
+    } catch {
+      return false;
+    } finally {
+      textarea.remove();
+    }
   }
 
   private getTurnoverProject(projectId?: string): TurnoverProject | null {

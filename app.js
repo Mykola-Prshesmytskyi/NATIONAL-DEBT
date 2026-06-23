@@ -631,10 +631,13 @@
     "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u043F\u0440\u043E\u043F\u043E\u0437\u0438\u0446\u0456\u044E": { en: "Create proposal", pl: "Utworz propozycje" },
     "\u041F\u0440\u043E\u043F\u043E\u0437\u0438\u0446\u0456\u0439 \u0449\u0435 \u043D\u0435\u043C\u0430\u0454": { en: "No proposals yet", pl: "Brak propozycji" },
     "\u041F\u043E\u0442\u0440\u0456\u0431\u043D\u043E": { en: "Needed", pl: "Potrzeba" },
+    "\u041F\u043E\u0442\u0440\u0456\u0431\u043D\u043E: {amount}": { en: "Needed: {amount}", pl: "Potrzeba: {amount}" },
     "\u041F\u043E\u043A\u0440\u0438\u0442\u043E": { en: "Covered", pl: "Pokryto" },
     "\u0406\u043D\u0432\u0435\u0441\u0442\u043E\u0432\u0430\u043D\u043E": { en: "Funded", pl: "Zainwestowano" },
     "\u0417\u0456\u0431\u0440\u0430\u043D\u043E": { en: "Collected", pl: "Zebrano" },
+    "\u0417\u0456\u0431\u0440\u0430\u043D\u043E: {amount}": { en: "Collected: {amount}", pl: "Zebrano: {amount}" },
     "\u041D\u0435 \u0432\u0438\u0441\u0442\u0430\u0447\u0430\u0454": { en: "Missing", pl: "Brakuje" },
+    "\u041D\u0435 \u0432\u0438\u0441\u0442\u0430\u0447\u0430\u0454: {amount}": { en: "Missing: {amount}", pl: "Brakuje: {amount}" },
     "\u0427\u0430\u0441\u0442\u043A\u0438 \u0437\u0430\u0440\u0430\u0437 {percent}%": {
       en: "Shares are {percent}%",
       pl: "Udzialy wynosza {percent}%"
@@ -651,6 +654,10 @@
     "\u0412\u043D\u0435\u0441\u043E\u043A": { en: "Contribution", pl: "Wplata" },
     "\u0406\u043D\u0432\u0435\u0441\u0442\u043E\u0440\u0443 {name}": { en: "To investor {name}", pl: "Inwestorowi {name}" },
     "\u0417\u0430\u043F\u0438\u0441\u0430\u0442\u0438 \u0432\u043D\u0435\u0441\u043E\u043A": { en: "Record contribution", pl: "Zapisz wplate" },
+    "{name}: \u0441\u043F\u043B\u0430\u0442\u0438\u0432 {paid}, \u0449\u0435 {remaining}": {
+      en: "{name}: paid {paid}, still owes {remaining}",
+      pl: "{name}: zaplacono {paid}, jeszcze {remaining}"
+    },
     "\u0406\u043D\u0432\u0435\u0441\u0442\u043E\u0440\u0438": { en: "Investors", pl: "Inwestorzy" },
     "\u041F\u043E\u0432\u0435\u0440\u043D\u0435\u043D\u043E {amount}": { en: "{amount} returned", pl: "Zwrocono {amount}" },
     "\u0406\u043D\u0432\u0435\u0441\u0442\u043E\u0440\u0456\u0432 \u0449\u0435 \u043D\u0435\u043C\u0430\u0454": { en: "No investors yet", pl: "Brak inwestorow" },
@@ -660,6 +667,17 @@
     "\u0414\u0430\u0432 {amount}": { en: "Funded {amount}", pl: "Dal {amount}" },
     "\u0417\u0430\u043B\u0438\u0448\u043E\u043A {amount}": { en: "{amount} left", pl: "Pozostalo {amount}" },
     "\u0417\u0430\u043F\u0438\u0441\u0430\u0442\u0438 \u043F\u043E\u0432\u0435\u0440\u043D\u0435\u043D\u043D\u044F": { en: "Record repayment", pl: "Zapisz zwrot" },
+    "{name}: \u0434\u0430\u0432 {amount}, \u043F\u043E\u0432\u0435\u0440\u043D\u0443\u043B\u043E\u0441\u044C {returned}, \u0449\u0435 {remaining}": {
+      en: "{name}: funded {amount}, returned {returned}, left {remaining}",
+      pl: "{name}: dal {amount}, zwrocono {returned}, zostalo {remaining}"
+    },
+    "\u043D\u0435\u043C\u0430\u0454": { en: "none", pl: "brak" },
+    "\u041F\u0456\u0434\u0441\u0443\u043C\u043E\u043A \u0434\u043B\u044F \u043A\u043E\u043F\u0456\u044E\u0432\u0430\u043D\u043D\u044F": { en: "Copyable summary", pl: "Podsumowanie do skopiowania" },
+    "\u0425\u0442\u043E \u0441\u043A\u0456\u043B\u044C\u043A\u0438 \u0437\u0430\u043F\u043B\u0430\u0442\u0438\u0432, \u0441\u043A\u0456\u043B\u044C\u043A\u0438 \u0449\u0435 \u0432\u0438\u043D\u0435\u043D, \u0456\u043D\u0432\u0435\u0441\u0442\u043E\u0440\u0438 \u0442\u0430 \u043F\u043E\u0432\u0435\u0440\u043D\u0435\u043D\u043D\u044F": {
+      en: "Who paid what, what is still owed, investors and repayments",
+      pl: "Kto ile zaplacil, ile jeszcze winien, inwestorzy i zwroty"
+    },
+    "\u041A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438": { en: "Copy", pl: "Kopiuj" },
     "\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F": { en: "Settings", pl: "Ustawienia" },
     "\u041C\u043E\u0432\u0430, \u0434\u0430\u043D\u0456 \u0456 \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u0430 \u043A\u043E\u043F\u0456\u044F": { en: "Language, data and backup", pl: "Jezyk, dane i kopia" },
     "\u0406\u043D\u0442\u0435\u0440\u0444\u0435\u0439\u0441": { en: "Interface", pl: "Interfejs" },
@@ -858,6 +876,9 @@
     },
     "\u0412\u043A\u0430\u0436\u0438 \u0434\u0430\u0442\u0443 \u0432\u043D\u0435\u0441\u043A\u0443": { en: "Enter contribution date", pl: "Wpisz date wplaty" },
     "\u0412\u043D\u0435\u0441\u043E\u043A \u0437\u0430\u043F\u0438\u0441\u0430\u043D\u043E": { en: "Contribution recorded", pl: "Wplata zapisana" },
+    "\u041D\u0435\u043C\u0430\u0454 \u0449\u043E \u043A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438": { en: "Nothing to copy", pl: "Nie ma czego kopiowac" },
+    "\u041F\u0456\u0434\u0441\u0443\u043C\u043E\u043A \u0441\u043A\u043E\u043F\u0456\u0439\u043E\u0432\u0430\u043D\u043E": { en: "Summary copied", pl: "Podsumowanie skopiowane" },
+    "\u041D\u0435 \u0432\u0434\u0430\u043B\u043E\u0441\u044F \u0441\u043A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438": { en: "Could not copy", pl: "Nie udalo sie skopiowac" },
     "\u0412\u043A\u0430\u0436\u0438 \u0434\u0430\u0442\u0443 \u0441\u0442\u0430\u0440\u0442\u0443": { en: "Enter start date", pl: "Wpisz date startu" },
     "\u0423 \u0441\u0443\u043C\u0430\u0445 \u043C\u0430\u044E\u0442\u044C \u0431\u0443\u0442\u0438 \u0442\u0456\u043B\u044C\u043A\u0438 \u0447\u0438\u0441\u043B\u0430": {
       en: "Amounts must contain numbers only",
@@ -1715,6 +1736,7 @@
       turnoverPeople: queryRequired("#turnover-people"),
       turnoverMessage: queryRequired("#turnover-message"),
       turnoverList: queryRequired("#turnover-list"),
+      turnoverCopySummary: queryRequired("#turnover-copy-summary"),
       preferencesForm: queryRequired("#preferences-form"),
       appLanguage: queryRequired("#app-language"),
       preferencesMessage: queryRequired("#preferences-message"),
@@ -2008,6 +2030,10 @@
       );
       this.els.settingsForm.addEventListener("submit", (event) => this.handleSettingsSubmit(event));
       this.els.turnoverForm.addEventListener("submit", (event) => this.handleTurnoverSubmit(event));
+      this.els.turnoverCopySummary.addEventListener(
+        "click",
+        () => void this.copyTurnoverSummary()
+      );
       this.els.preferencesForm.addEventListener(
         "submit",
         (event) => this.handlePreferencesSubmit(event)
@@ -2648,6 +2674,7 @@
     }
     renderTurnover() {
       const projects = this.state.turnoverProjects || [];
+      this.els.turnoverCopySummary.disabled = !projects.length;
       if (!projects.length) {
         this.els.turnoverList.innerHTML = `<div class="empty-state">${this.tr(
           "\u041F\u0440\u043E\u043F\u043E\u0437\u0438\u0446\u0456\u0439 \u0449\u0435 \u043D\u0435\u043C\u0430\u0454"
@@ -2655,6 +2682,15 @@
         return;
       }
       this.els.turnoverList.innerHTML = projects.map((project) => this.renderTurnoverProject(project)).join("");
+    }
+    async copyTurnoverSummary() {
+      const projects = this.state.turnoverProjects || [];
+      if (!projects.length) {
+        this.showTurnoverMessage("\u041D\u0435\u043C\u0430\u0454 \u0449\u043E \u043A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438", true);
+        return;
+      }
+      const ok = await this.copyTextToClipboard(this.makeTurnoverClipboardSummary(projects));
+      this.showTurnoverMessage(ok ? "\u041F\u0456\u0434\u0441\u0443\u043C\u043E\u043A \u0441\u043A\u043E\u043F\u0456\u0439\u043E\u0432\u0430\u043D\u043E" : "\u041D\u0435 \u0432\u0434\u0430\u043B\u043E\u0441\u044F \u0441\u043A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438", !ok);
     }
     renderTurnoverProject(project) {
       const participantPercent = project.participants.reduce(
@@ -3249,6 +3285,87 @@
           )}</option>`;
         })
       ].join("");
+    }
+    makeTurnoverClipboardSummary(projects) {
+      return projects.map((project) => {
+        const directContributionTotal = project.participants.reduce(
+          (total, participant) => total + this.getTurnoverParticipantDirectContributed(participant),
+          0
+        );
+        const investorTotal = project.investors.reduce(
+          (total, investor) => total + Number(investor.amount || 0),
+          0
+        );
+        const fundedTotal = roundMoney(directContributionTotal + investorTotal);
+        const missing = Math.max(0, project.targetAmount - fundedTotal);
+        const lines = [
+          project.title,
+          this.tr("\u041F\u043E\u0442\u0440\u0456\u0431\u043D\u043E: {amount}", {
+            amount: formatMoney(project.targetAmount, project.currency, this.language)
+          }),
+          this.tr("\u0417\u0456\u0431\u0440\u0430\u043D\u043E: {amount}", {
+            amount: formatMoney(fundedTotal, project.currency, this.language)
+          }),
+          this.tr("\u041D\u0435 \u0432\u0438\u0441\u0442\u0430\u0447\u0430\u0454: {amount}", {
+            amount: formatMoney(missing, project.currency, this.language)
+          }),
+          "",
+          `${this.tr("\u0423\u0447\u0430\u0441\u043D\u0438\u043A\u0438")}:`,
+          ...project.participants.map((participant) => {
+            const target = this.getTurnoverParticipantAmount(project, participant);
+            const paid = this.getTurnoverParticipantPaid(project, participant);
+            const remaining = Math.max(0, target - paid);
+            return this.tr("{name}: \u0441\u043F\u043B\u0430\u0442\u0438\u0432 {paid}, \u0449\u0435 {remaining}", {
+              name: participant.name,
+              paid: formatMoney(paid, project.currency, this.language),
+              remaining: formatMoney(remaining, project.currency, this.language)
+            });
+          }),
+          "",
+          `${this.tr("\u0406\u043D\u0432\u0435\u0441\u0442\u043E\u0440\u0438")}:`
+        ];
+        if (project.investors.length) {
+          lines.push(
+            ...project.investors.map((investor) => {
+              const returned = this.getTurnoverInvestorReturned(investor);
+              const remaining = Math.max(0, investor.amount - returned);
+              return this.tr("{name}: \u0434\u0430\u0432 {amount}, \u043F\u043E\u0432\u0435\u0440\u043D\u0443\u043B\u043E\u0441\u044C {returned}, \u0449\u0435 {remaining}", {
+                name: investor.name,
+                amount: formatMoney(investor.amount, project.currency, this.language),
+                returned: formatMoney(returned, project.currency, this.language),
+                remaining: formatMoney(remaining, project.currency, this.language)
+              });
+            })
+          );
+        } else {
+          lines.push(this.tr("\u043D\u0435\u043C\u0430\u0454"));
+        }
+        return lines.join("\n");
+      }).join("\n\n").replace(/\u00a0/g, " ");
+    }
+    async copyTextToClipboard(text) {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch {
+        }
+      }
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "true");
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      textarea.style.top = "0";
+      document.body.append(textarea);
+      textarea.select();
+      try {
+        return document.execCommand("copy");
+      } catch {
+        return false;
+      } finally {
+        textarea.remove();
+      }
     }
     getTurnoverProject(projectId) {
       return this.state.turnoverProjects.find((project) => project.id === projectId) || null;

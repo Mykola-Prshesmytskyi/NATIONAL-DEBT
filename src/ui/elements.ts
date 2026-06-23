@@ -84,6 +84,7 @@ export interface AppElements {
   turnoverPeople: HTMLInputElement;
   turnoverMessage: HTMLElement;
   turnoverList: HTMLElement;
+  turnoverCopySummary: HTMLButtonElement;
   preferencesForm: HTMLFormElement;
   appLanguage: HTMLSelectElement;
   preferencesMessage: HTMLElement;
@@ -190,6 +191,7 @@ export function getAppElements(): AppElements {
     turnoverPeople: queryRequired("#turnover-people"),
     turnoverMessage: queryRequired("#turnover-message"),
     turnoverList: queryRequired("#turnover-list"),
+    turnoverCopySummary: queryRequired("#turnover-copy-summary"),
     preferencesForm: queryRequired("#preferences-form"),
     appLanguage: queryRequired("#app-language"),
     preferencesMessage: queryRequired("#preferences-message"),
