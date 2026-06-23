@@ -14,6 +14,8 @@
   --rose-soft: #ffe4ea;
   --amber: #b7791f;
   --amber-soft: #fff3cf;
+  --fuel: #c05621;
+  --fuel-soft: #fff1e8;
   --violet: #6d5dfc;
   --shadow: 0 20px 48px rgba(21, 32, 43, 0.1);
   --radius: 8px;
@@ -73,6 +75,24 @@ select {
 
 button {
   cursor: pointer;
+}
+
+.icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.ui-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 h1,
@@ -575,6 +595,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
   min-height: 40px;
   border: 0;
   border-radius: 6px;
@@ -598,6 +619,7 @@ h2 {
 
 .form-grid,
 .exchange-grid,
+.fuel-grid,
 .settings-grid,
 .account-create-grid {
   display: grid;
@@ -676,6 +698,31 @@ h2 {
   box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
 }
 
+.fuel-options {
+  margin: 0 0 var(--space-4);
+}
+
+.fuel-grid {
+  border: 1px solid rgba(192, 86, 33, 0.22);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #fff, var(--fuel-soft));
+  padding: var(--space-4);
+}
+
+.fuel-rule-note {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1px solid rgba(192, 86, 33, 0.2);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--fuel);
+  padding: 0 var(--space-4);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
 .exchange-grid {
   position: relative;
 }
@@ -749,6 +796,10 @@ h2 {
   background: var(--blue);
 }
 
+.entry-item.is-fuel .entry-mark {
+  background: var(--fuel);
+}
+
 .entry-item.is-exchange .entry-mark {
   background: var(--amber);
 }
@@ -812,6 +863,39 @@ h2 {
   flex-wrap: wrap;
   gap: var(--space-2);
   align-items: center;
+}
+
+.fuel-extra {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.fuel-chip {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(192, 86, 33, 0.2);
+  border-radius: 999px;
+  background: var(--fuel-soft);
+  color: var(--fuel);
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.fuel-chip .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.fuel-chip--budget {
+  border-color: rgba(15, 118, 110, 0.18);
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 
 .debt-status,
@@ -999,6 +1083,7 @@ h2 {
   }
 
   .form-grid,
+  .fuel-grid,
   .settings-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1096,7 +1181,7 @@ h2 {
   }
 
   .filters {
-    grid-template-columns: repeat(6, minmax(70px, 1fr));
+    grid-template-columns: repeat(7, minmax(70px, 1fr));
     width: auto;
   }
 

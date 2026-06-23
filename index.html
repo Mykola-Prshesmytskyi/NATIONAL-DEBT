@@ -4,11 +4,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#eef4f8" />
+    <meta name="application-name" content="National Debt" />
+    <meta name="apple-mobile-web-app-title" content="National Debt" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="msapplication-TileColor" content="#15202b" />
+    <meta name="msapplication-TileImage" content="mstile-150.png" />
     <title>National Debt</title>
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="mask-icon" href="assets/mask-icon.svg" color="#0f766e" />
+    <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
   </head>
   <body>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="icon-expense" viewBox="0 0 24 24">
+        <path d="M6 7h12l-1 12H7L6 7Z"></path>
+        <path d="M9 7a3 3 0 0 1 6 0"></path>
+      </symbol>
+      <symbol id="icon-income" viewBox="0 0 24 24">
+        <path d="M12 4v13"></path>
+        <path d="m7 12 5 5 5-5"></path>
+        <path d="M5 20h14"></path>
+      </symbol>
+      <symbol id="icon-subscription" viewBox="0 0 24 24">
+        <path d="M17 3v4h-4"></path>
+        <path d="M7 21v-4h4"></path>
+        <path d="M17 7A7 7 0 0 0 6.9 6"></path>
+        <path d="M7 17a7 7 0 0 0 10.1 1"></path>
+      </symbol>
+      <symbol id="icon-exchange" viewBox="0 0 24 24">
+        <path d="M7 7h12"></path>
+        <path d="m16 4 3 3-3 3"></path>
+        <path d="M17 17H5"></path>
+        <path d="m8 14-3 3 3 3"></path>
+      </symbol>
+      <symbol id="icon-debt" viewBox="0 0 24 24">
+        <path d="M7 3h10v18H7z"></path>
+        <path d="M10 8h4"></path>
+        <path d="M10 12h4"></path>
+        <path d="M10 16h2"></path>
+      </symbol>
+      <symbol id="icon-fuel" viewBox="0 0 24 24">
+        <path d="M5 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16"></path>
+        <path d="M4 21h13"></path>
+        <path d="M8 7h5v4H8z"></path>
+        <path d="M16 8h2l2 2v7a2 2 0 0 1-4 0v-4h2"></path>
+      </symbol>
+      <symbol id="icon-droplet" viewBox="0 0 24 24">
+        <path d="M12 3s6 6.1 6 11a6 6 0 0 1-12 0c0-4.9 6-11 6-11Z"></path>
+      </symbol>
+      <symbol id="icon-card" viewBox="0 0 24 24">
+        <path d="M4 6h16v12H4z"></path>
+        <path d="M4 10h16"></path>
+        <path d="M7 15h3"></path>
+      </symbol>
+    </svg>
+
     <main class="app-shell">
       <header class="topbar">
         <div class="brand-block">
@@ -114,23 +169,45 @@
           <div class="type-switch" role="radiogroup" aria-label="Тип операції">
             <label>
               <input type="radio" name="entry-type" value="expense" checked />
-              <span>Витрата</span>
+              <span>
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-expense"></use></svg>
+                Витрата
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="entry-type" value="fuel" />
+              <span>
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-fuel"></use></svg>
+                Пальне
+              </span>
             </label>
             <label>
               <input type="radio" name="entry-type" value="income" />
-              <span>Дохід</span>
+              <span>
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-income"></use></svg>
+                Дохід
+              </span>
             </label>
             <label>
               <input type="radio" name="entry-type" value="subscription" />
-              <span>Підписка</span>
+              <span>
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-subscription"></use></svg>
+                Підписка
+              </span>
             </label>
             <label>
               <input type="radio" name="entry-type" value="exchange" />
-              <span>Обмін</span>
+              <span>
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-exchange"></use></svg>
+                Обмін
+              </span>
             </label>
             <label>
               <input type="radio" name="entry-type" value="debt" />
-              <span>Борг</span>
+              <span>
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-debt"></use></svg>
+                Борг
+              </span>
             </label>
           </div>
 
@@ -148,9 +225,26 @@
               </div>
             </div>
 
+            <div class="fuel-options" id="fuel-options" hidden>
+              <div class="fuel-grid">
+                <label class="field">
+                  <span>Вид палива</span>
+                  <input id="fuel-type" list="fuel-type-options" placeholder="А-95, дизель, газ" />
+                </label>
+                <label class="field">
+                  <span>Залито, л</span>
+                  <input id="fuel-liters" type="text" inputmode="decimal" placeholder="0" />
+                </label>
+                <div class="fuel-rule-note">
+                  <svg class="ui-icon" aria-hidden="true"><use href="#icon-fuel"></use></svg>
+                  Пальне не знімається з денного ліміту
+                </div>
+              </div>
+            </div>
+
             <div class="form-grid">
               <label class="field">
-                <span>Сума</span>
+                <span id="amount-label">Сума</span>
                 <input id="entry-amount" type="text" inputmode="decimal" placeholder="0" />
               </label>
 
@@ -227,11 +321,30 @@
             <h2>Історія</h2>
             <div class="filters" aria-label="Фільтр операцій">
               <button class="filter-button is-active" type="button" data-filter="all">Усі</button>
-              <button class="filter-button" type="button" data-filter="expense">Витрати</button>
-              <button class="filter-button" type="button" data-filter="income">Доходи</button>
-              <button class="filter-button" type="button" data-filter="subscription">Підписки</button>
-              <button class="filter-button" type="button" data-filter="exchange">Обміни</button>
-              <button class="filter-button" type="button" data-filter="debt">Борги</button>
+              <button class="filter-button" type="button" data-filter="expense">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-expense"></use></svg>
+                Витрати
+              </button>
+              <button class="filter-button" type="button" data-filter="fuel">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-fuel"></use></svg>
+                Пальне
+              </button>
+              <button class="filter-button" type="button" data-filter="income">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-income"></use></svg>
+                Доходи
+              </button>
+              <button class="filter-button" type="button" data-filter="subscription">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-subscription"></use></svg>
+                Підписки
+              </button>
+              <button class="filter-button" type="button" data-filter="exchange">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-exchange"></use></svg>
+                Обміни
+              </button>
+              <button class="filter-button" type="button" data-filter="debt">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-debt"></use></svg>
+                Борги
+              </button>
             </div>
           </div>
           <div class="entries-list" id="entries-list"></div>
@@ -384,6 +497,14 @@
       <option value="PLN"></option>
       <option value="GBP"></option>
       <option value="USDT"></option>
+    </datalist>
+    <datalist id="fuel-type-options">
+      <option value="А-95"></option>
+      <option value="А-95+"></option>
+      <option value="А-92"></option>
+      <option value="Дизель"></option>
+      <option value="Газ"></option>
+      <option value="Електро"></option>
     </datalist>
 
     <script src="app.js"></script>

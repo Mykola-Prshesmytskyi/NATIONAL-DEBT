@@ -4,7 +4,7 @@
   const CLOUD_PREFIX = "national_debt_v1";
   const CLOUD_META_KEY = `${CLOUD_PREFIX}_meta`;
   const CLOUD_CHUNK_SIZE = 3800;
-  const APP_VERSION = 4;
+  const APP_VERSION = 5;
   const BASE_CURRENCY = "UAH";
   const DEFAULT_DAILY_ALLOWANCE = 500;
   const STORAGE_TIMEOUT_MS = 4500;
@@ -30,6 +30,12 @@
       label: "Витрата",
       detailLabel: "На що витрачено",
       placeholder: "Продукти, кава, таксі",
+      sign: -1,
+    },
+    fuel: {
+      label: "Пальне",
+      detailLabel: "АЗС або нотатка",
+      placeholder: "ОККО, WOG, траса",
       sign: -1,
     },
     income: {
@@ -116,7 +122,11 @@
       form: document.querySelector("#entry-form"),
       normalFields: document.querySelector("#normal-fields"),
       exchangeFields: document.querySelector("#exchange-fields"),
+      fuelOptions: document.querySelector("#fuel-options"),
+      fuelType: document.querySelector("#fuel-type"),
+      fuelLiters: document.querySelector("#fuel-liters"),
       amount: document.querySelector("#entry-amount"),
+      amountLabel: document.querySelector("#amount-label"),
       account: document.querySelector("#entry-account"),
       entryBudgetAmount: document.querySelector("#entry-budget-amount"),
       budgetEquivalentField: document.querySelector("#budget-equivalent-field"),
@@ -319,6 +329,7 @@
     const amount = parseAmount(els.amount.value);
     const detail = els.detail.value.trim();
     const date = els.date.value || todayKey();
+    let fuelData = null;
 
     if (!account) {
       showFormMessage("Спочатку додай рахунок", true);
@@ -330,13 +341,22 @@
       return;
     }
 
-    if (!detail) {
+    if (!detail && type !== "fuel") {
       showFormMessage(type === "income" ? "Вкажи звідки кошти" : "Вкажи деталі", true);
       return;
     }
 
+    if (type === "fuel") {
+      fuelData = readFuelFields();
+      if (!fuelData) return;
+    }
+
     const budgetAmount = getBudgetAmountFromForm(type, account, amount);
     if (budgetAmount === null) return;
+    const entryDetail =
+      type === "fuel" && !detail
+        ? makeFuelDetail(fuelData.fuelType, fuelData.fuelLiters)
+        : detail;
 
     state.entries.push({
       id: makeId("entry"),
@@ -345,7 +365,8 @@
       amount,
       currency: account.currency,
       budgetAmount,
-      detail,
+      detail: entryDetail,
+      ...(fuelData || {}),
       date,
       createdAt: new Date().toISOString(),
     });
@@ -353,6 +374,10 @@
     els.amount.value = "";
     els.entryBudgetAmount.value = "";
     els.detail.value = "";
+    if (type === "fuel") {
+      els.fuelType.value = "";
+      els.fuelLiters.value = "";
+    }
     els.date.value = todayKey();
     commitState("Збережено");
   }
@@ -755,6 +780,7 @@
     const account = getAccount(els.account.value);
     const isExchange = type === "exchange";
     const isDebt = type === "debt";
+    const isFuel = type === "fuel";
     const meta = TYPE_META[type] || TYPE_META.expense;
     const debtMeta = DEBT_DIRECTION_META[getSelectedDebtDirection()] || DEBT_DIRECTION_META.to_me;
 
@@ -762,6 +788,8 @@
     els.exchangeFields.hidden = !isExchange;
     els.debtOptions.hidden = !isDebt;
     els.debtReceiptField.hidden = !isDebt;
+    els.fuelOptions.hidden = !isFuel;
+    els.amountLabel.textContent = isFuel ? "Заплатив" : "Сума";
 
     if (isExchange) {
       els.currencyBadge.textContent = "Обмін";
@@ -771,7 +799,7 @@
 
     els.detailLabel.textContent = isDebt ? debtMeta.detailLabel : meta.detailLabel;
     els.detail.placeholder = isDebt ? debtMeta.placeholder : meta.placeholder;
-    els.currencyBadge.textContent = isDebt ? "Борг" : account?.currency || BASE_CURRENCY;
+    els.currencyBadge.textContent = isDebt ? "Борг" : isFuel ? "Пальне" : account?.currency || BASE_CURRENCY;
 
     const needsBudgetEquivalent =
       account &&
@@ -824,6 +852,7 @@
   function renderEntry(entry) {
     if (entry.type === "exchange") return renderExchangeEntry(entry);
     if (entry.type === "debt") return renderDebtEntry(entry);
+    if (entry.type === "fuel") return renderFuelEntry(entry);
 
     const account = getAccount(entry.accountId);
     const meta = TYPE_META[entry.type] || TYPE_META.expense;
@@ -851,6 +880,46 @@
         <button class="entry-delete" type="button" data-delete-id="${escapeHtml(
           entry.id,
         )}" aria-label="Видалити">×</button>
+      </article>
+    `;
+  }
+
+  function renderFuelEntry(entry) {
+    const account = getAccount(entry.accountId);
+    const currency = entry.currency || account?.currency || BASE_CURRENCY;
+    const amount = Number(entry.amount || 0);
+    const liters = Math.max(0, coerceNumber(entry.fuelLiters, 0));
+    const fuelType = normalizeFuelType(entry.fuelType);
+    const pricePerLiter =
+      liters > 0 ? `<span class="fuel-chip">${formatMoney(amount / liters, currency)}/л</span>` : "";
+
+    return `
+      <article class="entry-item is-fuel">
+        <span class="entry-mark" aria-hidden="true"></span>
+        <div class="entry-main">
+          <strong>${escapeHtml(entry.detail || makeFuelDetail(fuelType, liters))}</strong>
+          <span>Пальне · ${formatDateHuman(entry.date)} · ${escapeHtml(
+            account?.name || "Рахунок видалено",
+          )}</span>
+        </div>
+        <div class="entry-amount is-negative">
+          ${formatSignedMoney(-amount, currency)}
+        </div>
+        <button class="entry-delete" type="button" data-delete-id="${escapeHtml(
+          entry.id,
+        )}" aria-label="Видалити">×</button>
+        <div class="fuel-extra">
+          <span class="fuel-chip">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-fuel"></use></svg>
+            ${escapeHtml(fuelType)}
+          </span>
+          <span class="fuel-chip">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-droplet"></use></svg>
+            ${formatFuelLiters(liters)} л
+          </span>
+          ${pricePerLiter}
+          <span class="fuel-chip fuel-chip--budget">не в денному ліміті</span>
+        </div>
       </article>
     `;
   }
@@ -1025,6 +1094,7 @@
   }
 
   function getBudgetAmountFromForm(type, account, amount) {
+    if (type === "fuel") return 0;
     if (type === "income") return 0;
     if (account.currency === BASE_CURRENCY) return amount;
 
@@ -1151,8 +1221,15 @@
     if (entry.type === "expense" || entry.type === "subscription") {
       return getEntryBudgetAmount(entry);
     }
+    if (entry.type === "fuel") return getFuelChartAmount(entry);
     if (entry.type === "debt") return getDebtWriteOffAmount(entry);
     return 0;
+  }
+
+  function getFuelChartAmount(entry) {
+    const account = getAccount(entry.accountId);
+    const currency = entry.currency || account?.currency || BASE_CURRENCY;
+    return currency === BASE_CURRENCY ? Number(entry.amount || 0) : 0;
   }
 
   function getChartBudgetDate(entry) {
@@ -1178,6 +1255,28 @@
 
   function getSelectedDebtDirection() {
     return document.querySelector('input[name="debt-direction"]:checked')?.value || "to_me";
+  }
+
+  function readFuelFields() {
+    const rawFuelType = els.fuelType.value.trim();
+    const fuelType = normalizeFuelType(rawFuelType);
+    const fuelLiters = parseSettingAmount(els.fuelLiters.value);
+
+    if (!rawFuelType) {
+      showFormMessage("Вкажи вид палива", true);
+      return null;
+    }
+
+    if (!fuelLiters || fuelLiters <= 0) {
+      showFormMessage("Вкажи скільки літрів залито", true);
+      return null;
+    }
+
+    return {
+      fuelType,
+      fuelLiters,
+      budgetAmount: 0,
+    };
   }
 
   function getAccount(accountId) {
@@ -1437,17 +1536,26 @@
         ? amount
         : 0;
 
-    return {
+    const normalized = {
       id: String(entry.id || makeId("entry")),
       type,
       accountId,
       amount: roundMoney(amount),
       currency: normalizeCurrency(entry.currency || account.currency),
-      budgetAmount: Math.max(0, coerceNumber(entry.budgetAmount, fallbackBudget)),
+      budgetAmount:
+        type === "fuel" ? 0 : Math.max(0, coerceNumber(entry.budgetAmount, fallbackBudget)),
       detail: String(entry.detail || "Без опису"),
       date: isDateKey(entry.date) ? entry.date : todayKey(),
       createdAt: entry.createdAt || new Date().toISOString(),
     };
+
+    if (type === "fuel") {
+      normalized.fuelType = normalizeFuelType(entry.fuelType);
+      normalized.fuelLiters = Math.max(0, coerceNumber(entry.fuelLiters, 0));
+      if (!entry.detail) normalized.detail = makeFuelDetail(normalized.fuelType, normalized.fuelLiters);
+    }
+
+    return normalized;
   }
 
   function isEmptyLegacyState(source) {
@@ -2004,6 +2112,16 @@
     }).format(value);
   }
 
+  function formatFuelLiters(value) {
+    return new Intl.NumberFormat("uk-UA", {
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
+
+  function makeFuelDetail(fuelType, liters) {
+    return `Пальне: ${normalizeFuelType(fuelType)}, ${formatFuelLiters(liters)} л`;
+  }
+
   function chartRangeLabel(range) {
     if (range === 7) return "тиждень";
     if (range === 30) return "місяць";
@@ -2056,6 +2174,10 @@
       .toUpperCase()
       .replace(/[^A-Z0-9]/g, "")
       .slice(0, 8);
+  }
+
+  function normalizeFuelType(value) {
+    return String(value || "Пальне").trim().slice(0, 40) || "Пальне";
   }
 
   function makeId(prefix) {
